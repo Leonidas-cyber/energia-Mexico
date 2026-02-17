@@ -1,0 +1,295 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "id": 1, "nombre": "01 - Gasoducto Rosarito", "tipo": "CENAGAS", "longitud_km": 45, "estado": "Operando", "diametro_pulg": 30 },
+      "geometry": { "type": "LineString", "coordinates": [[-117.05, 32.54], [-116.95, 32.45], [-116.85, 32.35], [-116.62, 32.24]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 2, "nombre": "02 - Gasoducto Naco - Hermosillo", "tipo": "Privado CFE", "longitud_km": 340, "estado": "Operando", "diametro_pulg": 36 },
+      "geometry": { "type": "LineString", "coordinates": [[-109.95, 31.33], [-110.1, 31.0], [-110.3, 30.6], [-110.6, 30.2], [-110.95, 29.1]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 3, "nombre": "03 - Gasoducto Puerto Libertad", "tipo": "Privado CFE", "longitud_km": 180, "estado": "Operando", "diametro_pulg": 30 },
+      "geometry": { "type": "LineString", "coordinates": [[-111.55, 31.5], [-112.0, 31.3], [-112.3, 30.9], [-112.4, 30.3], [-112.7, 29.9]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 4, "nombre": "04 - Gasoducto Sonora (Sasabe - Guaymas - El Oro)", "tipo": "Privado CFE", "longitud_km": 835, "estado": "Operando", "diametro_pulg": 36 },
+      "geometry": { "type": "LineString", "coordinates": [[-111.55, 31.5], [-111.4, 31.0], [-111.2, 30.5], [-111.0, 30.0], [-110.9, 29.5], [-110.92, 28.8], [-110.3, 27.9], [-109.5, 27.0], [-108.5, 26.2], [-107.5, 25.5], [-106.5, 25.0], [-105.5, 24.8], [-105.0, 25.0]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 5, "nombre": "05 - Gasoducto Chihuahua (Waha - Presidio - Chihuahua)", "tipo": "Privado CFE", "longitud_km": 590, "estado": "Operando", "diametro_pulg": 42 },
+      "geometry": { "type": "LineString", "coordinates": [[-104.8, 30.4], [-104.9, 30.2], [-105.0, 29.8], [-105.5, 29.2], [-105.8, 28.9], [-106.1, 28.6]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 6, "nombre": "06 - Gasoducto Samalayuca - Sásabe", "tipo": "CENAGAS", "longitud_km": 510, "estado": "Operando", "diametro_pulg": 36 },
+      "geometry": { "type": "LineString", "coordinates": [[-106.4, 31.3], [-107.0, 31.5], [-108.0, 31.6], [-109.0, 31.6], [-110.0, 31.5], [-111.0, 31.5], [-111.55, 31.5]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 7, "nombre": "07 - Gasoducto Ojinaga - El Encino", "tipo": "Privado CFE", "longitud_km": 220, "estado": "En construcción", "diametro_pulg": 42 },
+      "geometry": { "type": "LineString", "coordinates": [[-104.4, 29.55], [-104.6, 29.0], [-104.8, 28.5], [-105.0, 27.5], [-105.0, 26.5]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 8, "nombre": "08 - Gasoducto El Oro - Mazatlán", "tipo": "CENAGAS", "longitud_km": 320, "estado": "Operando", "diametro_pulg": 24 },
+      "geometry": { "type": "LineString", "coordinates": [[-105.0, 25.0], [-105.2, 24.5], [-105.6, 23.8], [-106.0, 23.4], [-106.42, 23.22]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 9, "nombre": "09 - Gasoducto San Isidro - Samalayuca", "tipo": "CENAGAS", "longitud_km": 22, "estado": "Operando", "diametro_pulg": 42 },
+      "geometry": { "type": "LineString", "coordinates": [[-106.42, 31.73], [-106.4, 31.5], [-106.4, 31.3]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 10, "nombre": "10 - Gasoducto Aguaprieta", "tipo": "Privado CFE", "longitud_km": 200, "estado": "Operando", "diametro_pulg": 30 },
+      "geometry": { "type": "LineString", "coordinates": [[-109.55, 31.32], [-109.2, 31.2], [-108.5, 31.1], [-107.5, 31.2], [-106.5, 31.3], [-106.4, 31.3]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 11, "nombre": "11 - Gasoducto Chihuahua - El Encino", "tipo": "CENAGAS", "longitud_km": 180, "estado": "Operando", "diametro_pulg": 30 },
+      "geometry": { "type": "LineString", "coordinates": [[-106.1, 28.6], [-106.0, 28.2], [-105.8, 27.5], [-105.5, 27.0], [-105.0, 26.5]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 12, "nombre": "12 - Gasoducto El Encino - La Laguna", "tipo": "Privado CFE", "longitud_km": 420, "estado": "Operando", "diametro_pulg": 30 },
+      "geometry": { "type": "LineString", "coordinates": [[-105.0, 26.5], [-104.8, 26.0], [-104.5, 25.7], [-104.0, 25.5], [-103.5, 25.4], [-103.4, 25.54]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 13, "nombre": "13 - Gasoducto Comanche Trail (Waha - San Elizario)", "tipo": "Privado CFE", "longitud_km": 320, "estado": "Operando", "diametro_pulg": 42 },
+      "geometry": { "type": "LineString", "coordinates": [[-104.8, 30.4], [-105.3, 30.8], [-105.8, 31.2], [-106.2, 31.5], [-106.4, 31.73]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 14, "nombre": "14 - Gasoducto Reynosa - Monterrey", "tipo": "CENAGAS", "longitud_km": 220, "estado": "Operando", "diametro_pulg": 36 },
+      "geometry": { "type": "LineString", "coordinates": [[-98.3, 26.08], [-98.8, 26.0], [-99.2, 25.9], [-99.6, 25.8], [-100.0, 25.7], [-100.3, 25.67]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 15, "nombre": "15 - Gasoducto Monterrey - Saltillo", "tipo": "CENAGAS", "longitud_km": 85, "estado": "Operando", "diametro_pulg": 24 },
+      "geometry": { "type": "LineString", "coordinates": [[-100.3, 25.67], [-100.5, 25.5], [-100.8, 25.4], [-101.0, 25.42]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 16, "nombre": "16 - Gasoducto Nuevo León - Durango", "tipo": "CENAGAS", "longitud_km": 500, "estado": "Operando", "diametro_pulg": 24 },
+      "geometry": { "type": "LineString", "coordinates": [[-100.3, 25.67], [-100.8, 25.3], [-101.3, 25.0], [-101.8, 24.8], [-102.3, 24.5], [-103.0, 24.2], [-103.5, 24.0], [-104.0, 24.0], [-104.65, 24.02]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 17, "nombre": "17 - Gasoducto Villa de Reyes - Aguascalientes", "tipo": "CENAGAS", "longitud_km": 140, "estado": "Operando", "diametro_pulg": 24 },
+      "geometry": { "type": "LineString", "coordinates": [[-100.8, 22.0], [-101.0, 21.8], [-101.5, 21.7], [-102.0, 21.8], [-102.3, 21.88]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 18, "nombre": "18 - Gasoducto Aguascalientes - Guadalajara", "tipo": "Privado CFE", "longitud_km": 230, "estado": "Operando", "diametro_pulg": 24 },
+      "geometry": { "type": "LineString", "coordinates": [[-102.3, 21.88], [-102.5, 21.5], [-102.8, 21.1], [-103.0, 20.9], [-103.35, 20.67]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 19, "nombre": "19 - Gasoducto Guadalajara - Manzanillo", "tipo": "Privado CFE", "longitud_km": 310, "estado": "Operando", "diametro_pulg": 24 },
+      "geometry": { "type": "LineString", "coordinates": [[-103.35, 20.67], [-103.5, 20.5], [-103.8, 20.2], [-104.0, 19.8], [-104.2, 19.4], [-104.3, 19.05]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 20, "nombre": "20 - Gasoducto Salamanca - Guadalajara", "tipo": "CENAGAS", "longitud_km": 250, "estado": "Operando", "diametro_pulg": 30 },
+      "geometry": { "type": "LineString", "coordinates": [[-101.0, 20.58], [-101.5, 20.6], [-102.0, 20.6], [-102.5, 20.65], [-103.0, 20.67], [-103.35, 20.67]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 21, "nombre": "21 - Gasoducto La Laguna - Aguascalientes", "tipo": "Privado CFE", "longitud_km": 500, "estado": "Operando", "diametro_pulg": 30 },
+      "geometry": { "type": "LineString", "coordinates": [[-103.4, 25.54], [-103.0, 25.0], [-102.8, 24.5], [-102.5, 23.8], [-102.3, 23.2], [-102.3, 22.5], [-102.3, 21.88]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 22, "nombre": "22 - Gasoducto Tula - Salamanca", "tipo": "CENAGAS", "longitud_km": 200, "estado": "Operando", "diametro_pulg": 30 },
+      "geometry": { "type": "LineString", "coordinates": [[-99.35, 20.05], [-99.5, 20.3], [-99.8, 20.5], [-100.2, 20.6], [-100.5, 20.6], [-101.0, 20.58]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 23, "nombre": "23 - Gasoducto Tula - Villa de Reyes", "tipo": "CENAGAS", "longitud_km": 280, "estado": "Operando", "diametro_pulg": 30 },
+      "geometry": { "type": "LineString", "coordinates": [[-99.35, 20.05], [-99.5, 20.3], [-99.7, 20.8], [-100.0, 21.2], [-100.5, 21.8], [-100.8, 22.0]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 24, "nombre": "24 - Gasoducto Lázaro Cárdenas - Acapulco", "tipo": "Privado CFE", "longitud_km": 350, "estado": "En construcción", "diametro_pulg": 24 },
+      "geometry": { "type": "LineString", "coordinates": [[-102.2, 17.95], [-101.5, 17.6], [-100.5, 17.2], [-99.9, 16.9]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 25, "nombre": "25 - Gasoducto Manzanillo - Lázaro Cárdenas", "tipo": "Privado CFE", "longitud_km": 260, "estado": "En construcción", "diametro_pulg": 24 },
+      "geometry": { "type": "LineString", "coordinates": [[-104.3, 19.05], [-104.0, 18.8], [-103.5, 18.5], [-103.0, 18.2], [-102.5, 18.0], [-102.2, 17.95]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 26, "nombre": "26 - Gasoducto Acapulco - Oaxaca", "tipo": "Privado CFE", "longitud_km": 380, "estado": "En construcción", "diametro_pulg": 24 },
+      "geometry": { "type": "LineString", "coordinates": [[-99.9, 16.9], [-99.2, 16.8], [-98.5, 16.7], [-97.8, 16.6], [-97.1, 16.5], [-96.7, 17.06]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 27, "nombre": "27 - Gasoducto Oaxaca - Salina Cruz", "tipo": "Privado CFE", "longitud_km": 150, "estado": "En construcción", "diametro_pulg": 24 },
+      "geometry": { "type": "LineString", "coordinates": [[-96.7, 17.06], [-96.4, 16.8], [-96.0, 16.4], [-95.5, 16.2], [-95.2, 16.18]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 28, "nombre": "28 - Gasoducto Morelos (Tlaxcala - Cuautla)", "tipo": "Privado CFE", "longitud_km": 170, "estado": "En construcción", "diametro_pulg": 30 },
+      "geometry": { "type": "LineString", "coordinates": [[-98.2, 19.3], [-98.4, 19.2], [-98.6, 19.0], [-98.8, 18.85], [-99.0, 18.92]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 29, "nombre": "29 - Gasoducto Tuxpan - Tula", "tipo": "Privado CFE", "longitud_km": 250, "estado": "Operando", "diametro_pulg": 42 },
+      "geometry": { "type": "LineString", "coordinates": [[-97.3, 20.95], [-97.6, 20.8], [-98.0, 20.6], [-98.5, 20.4], [-99.0, 20.1], [-99.35, 20.05]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 30, "nombre": "30 - Gasoducto Sur de Texas - Tuxpan (Marino)", "tipo": "Privado CFE", "longitud_km": 800, "estado": "Operando", "diametro_pulg": 42 },
+      "geometry": { "type": "LineString", "coordinates": [[-97.2, 26.1], [-96.5, 25.5], [-96.2, 24.5], [-96.0, 23.5], [-96.0, 22.5], [-96.5, 21.5], [-97.0, 21.0], [-97.3, 20.95]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 31, "nombre": "31 - Gasoducto Burgos - Reynosa", "tipo": "CENAGAS", "longitud_km": 120, "estado": "Operando", "diametro_pulg": 30 },
+      "geometry": { "type": "LineString", "coordinates": [[-98.3, 26.08], [-98.0, 25.8], [-97.8, 25.5], [-97.5, 25.2], [-97.4, 24.9]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 32, "nombre": "32 - Gasoducto Tampico - San Luis Potosí", "tipo": "CENAGAS", "longitud_km": 380, "estado": "Operando", "diametro_pulg": 30 },
+      "geometry": { "type": "LineString", "coordinates": [[-97.85, 22.25], [-98.2, 22.3], [-98.8, 22.3], [-99.3, 22.3], [-99.8, 22.2], [-100.2, 22.1], [-100.8, 22.0]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 33, "nombre": "33 - Gasoducto Poza Rica - Tuxpan", "tipo": "CENAGAS", "longitud_km": 60, "estado": "Operando", "diametro_pulg": 24 },
+      "geometry": { "type": "LineString", "coordinates": [[-97.45, 20.55], [-97.35, 20.7], [-97.3, 20.95]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 34, "nombre": "34 - Gasoducto Tamazunchale - El Abra", "tipo": "CENAGAS", "longitud_km": 150, "estado": "Operando", "diametro_pulg": 24 },
+      "geometry": { "type": "LineString", "coordinates": [[-98.8, 21.27], [-99.0, 21.5], [-99.2, 21.7], [-99.5, 21.9], [-99.8, 22.0], [-100.0, 22.1]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 35, "nombre": "35 - Gasoducto Los Ramones Fase I", "tipo": "Privado CFE", "longitud_km": 117, "estado": "Operando", "diametro_pulg": 48 },
+      "geometry": { "type": "LineString", "coordinates": [[-98.2, 24.9], [-98.6, 25.2], [-98.8, 25.5], [-99.0, 25.8], [-99.2, 26.0], [-99.0, 26.4]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 36, "nombre": "36 - Gasoducto San Fernando - Matamoros", "tipo": "CENAGAS", "longitud_km": 150, "estado": "Operando", "diametro_pulg": 24 },
+      "geometry": { "type": "LineString", "coordinates": [[-99.0, 26.4], [-98.5, 26.2], [-98.0, 25.9], [-97.5, 25.87]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 37, "nombre": "37 - Gasoducto Los Ramones Fase II Norte", "tipo": "Privado CFE", "longitud_km": 452, "estado": "Operando", "diametro_pulg": 42 },
+      "geometry": { "type": "LineString", "coordinates": [[-99.0, 26.4], [-99.5, 26.2], [-100.0, 25.8], [-100.3, 25.67]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 38, "nombre": "38 - Gasoducto Los Ramones Fase II Sur", "tipo": "Privado CFE", "longitud_km": 290, "estado": "Operando", "diametro_pulg": 36 },
+      "geometry": { "type": "LineString", "coordinates": [[-99.0, 26.4], [-98.5, 25.8], [-98.2, 25.0], [-97.8, 24.0], [-97.5, 23.0], [-97.5, 22.6], [-97.8, 22.4]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 39, "nombre": "39 - Gasoducto Altamira - Tampico", "tipo": "CENAGAS", "longitud_km": 50, "estado": "Operando", "diametro_pulg": 30 },
+      "geometry": { "type": "LineString", "coordinates": [[-97.8, 22.4], [-97.85, 22.25]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 40, "nombre": "40 - Gasoducto Cempoala - Tuxpan", "tipo": "CENAGAS", "longitud_km": 230, "estado": "Operando", "diametro_pulg": 30 },
+      "geometry": { "type": "LineString", "coordinates": [[-97.8, 22.4], [-97.6, 22.0], [-97.4, 21.5], [-97.3, 21.0], [-97.3, 20.95]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 41, "nombre": "41 - Gasoducto Puebla - CDMX", "tipo": "CENAGAS", "longitud_km": 130, "estado": "Operando", "diametro_pulg": 24 },
+      "geometry": { "type": "LineString", "coordinates": [[-98.2, 19.04], [-98.5, 19.1], [-98.8, 19.2], [-99.1, 19.35], [-99.13, 19.43]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 42, "nombre": "42 - Gasoducto CDMX - Tula", "tipo": "CENAGAS", "longitud_km": 90, "estado": "Operando", "diametro_pulg": 24 },
+      "geometry": { "type": "LineString", "coordinates": [[-99.13, 19.43], [-99.15, 19.6], [-99.2, 19.8], [-99.35, 20.05]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 43, "nombre": "43 - Gasoducto Veracruz - Puebla", "tipo": "CENAGAS", "longitud_km": 240, "estado": "Operando", "diametro_pulg": 24 },
+      "geometry": { "type": "LineString", "coordinates": [[-96.13, 19.18], [-96.5, 19.3], [-97.0, 19.2], [-97.5, 19.1], [-98.0, 19.05], [-98.2, 19.04]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 44, "nombre": "44 - Gasoducto Coatzacoalcos - Veracruz", "tipo": "CENAGAS", "longitud_km": 310, "estado": "Operando", "diametro_pulg": 30 },
+      "geometry": { "type": "LineString", "coordinates": [[-94.45, 18.15], [-94.8, 18.3], [-95.2, 18.5], [-95.6, 18.7], [-96.0, 19.0], [-96.13, 19.18]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 45, "nombre": "45 - Gasoducto Cactus - Coatzacoalcos", "tipo": "CENAGAS", "longitud_km": 300, "estado": "Operando", "diametro_pulg": 36 },
+      "geometry": { "type": "LineString", "coordinates": [[-93.6, 17.7], [-93.8, 17.8], [-94.0, 18.0], [-94.2, 18.15], [-94.45, 18.15]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 46, "nombre": "46 - Gasoducto Coatzacoalcos - Salina Cruz", "tipo": "CENAGAS", "longitud_km": 280, "estado": "Operando", "diametro_pulg": 24 },
+      "geometry": { "type": "LineString", "coordinates": [[-94.45, 18.15], [-94.6, 17.8], [-94.8, 17.2], [-95.0, 16.5], [-95.2, 16.18]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 47, "nombre": "47 - Gasoducto Jaltipán - Salina Cruz", "tipo": "Privado CFE", "longitud_km": 260, "estado": "Operando", "diametro_pulg": 30 },
+      "geometry": { "type": "LineString", "coordinates": [[-94.7, 17.85], [-94.9, 17.5], [-95.0, 17.0], [-95.15, 16.5], [-95.2, 16.18]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 48, "nombre": "48 - Gasoducto Ciudad Pemex - Dos Bocas", "tipo": "CENAGAS", "longitud_km": 80, "estado": "Operando", "diametro_pulg": 30 },
+      "geometry": { "type": "LineString", "coordinates": [[-93.5, 17.9], [-93.3, 18.0], [-93.2, 18.2], [-93.2, 18.45]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 49, "nombre": "49 - Gasoducto Mayakán (Ciudad Pemex - Mérida)", "tipo": "Privado CFE", "longitud_km": 700, "estado": "Operando", "diametro_pulg": 24 },
+      "geometry": { "type": "LineString", "coordinates": [[-93.5, 17.9], [-93.0, 18.0], [-92.5, 18.2], [-92.0, 18.5], [-91.5, 18.8], [-91.0, 19.2], [-90.5, 19.8], [-90.0, 20.3], [-89.62, 20.97]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 50, "nombre": "50 - Gasoducto Salina Cruz - Tapachula", "tipo": "Privado CFE", "longitud_km": 450, "estado": "Operando", "diametro_pulg": 24 },
+      "geometry": { "type": "LineString", "coordinates": [[-95.2, 16.18], [-94.8, 15.8], [-94.2, 15.5], [-93.5, 15.2], [-92.8, 14.9], [-92.26, 14.64]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 51, "nombre": "51 - Gasoducto Cuxtal (Mérida - Valladolid)", "tipo": "CENAGAS", "longitud_km": 280, "estado": "Operando", "diametro_pulg": 24 },
+      "geometry": { "type": "LineString", "coordinates": [[-89.62, 20.97], [-89.2, 20.9], [-88.7, 20.7], [-88.2, 20.65]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 52, "nombre": "52 - Gasoducto Morelos (Tlaxcala - Cuautla - Yecapixtla)", "tipo": "Privado CFE", "longitud_km": 160, "estado": "Operando", "diametro_pulg": 30 },
+      "geometry": { "type": "LineString", "coordinates": [[-98.2, 19.3], [-98.5, 19.15], [-98.7, 19.0], [-98.9, 18.85], [-99.1, 18.77]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 53, "nombre": "53 - Gasoducto Cactus - Nuevo Pemex", "tipo": "CENAGAS", "longitud_km": 60, "estado": "Operando", "diametro_pulg": 24 },
+      "geometry": { "type": "LineString", "coordinates": [[-93.6, 17.7], [-93.5, 17.6], [-93.4, 17.45], [-93.35, 17.3]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 54, "nombre": "54 - Gasoducto Nuevo Pemex - Cd. Pemex", "tipo": "CENAGAS", "longitud_km": 70, "estado": "Operando", "diametro_pulg": 24 },
+      "geometry": { "type": "LineString", "coordinates": [[-93.35, 17.3], [-93.3, 17.5], [-93.4, 17.7], [-93.5, 17.9]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 55, "nombre": "55 - Gasoducto Lerdo - Salamanca", "tipo": "CENAGAS", "longitud_km": 120, "estado": "Operando", "diametro_pulg": 24 },
+      "geometry": { "type": "LineString", "coordinates": [[-100.8, 22.0], [-100.9, 21.5], [-101.0, 21.0], [-101.0, 20.58]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 56, "nombre": "56 - Gasoducto Tampico - Poza Rica", "tipo": "CENAGAS", "longitud_km": 180, "estado": "Operando", "diametro_pulg": 24 },
+      "geometry": { "type": "LineString", "coordinates": [[-97.85, 22.25], [-97.7, 21.8], [-97.6, 21.3], [-97.5, 20.8], [-97.45, 20.55]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 57, "nombre": "57 - Gasoducto Tlaxcala - Puebla", "tipo": "CENAGAS", "longitud_km": 65, "estado": "Operando", "diametro_pulg": 20 },
+      "geometry": { "type": "LineString", "coordinates": [[-98.2, 19.3], [-98.2, 19.15], [-98.2, 19.04]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 58, "nombre": "58 - Gasoducto Poza Rica - Tamazunchale", "tipo": "CENAGAS", "longitud_km": 200, "estado": "Operando", "diametro_pulg": 24 },
+      "geometry": { "type": "LineString", "coordinates": [[-97.45, 20.55], [-97.8, 20.8], [-98.2, 21.0], [-98.5, 21.1], [-98.8, 21.27]] }
+    }
+  ]
+}

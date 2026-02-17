@@ -1,0 +1,131 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Recursos Energéticos UAM AZC — Design System
+   Institutional technical style with blue/green energy accents.
+   All colors MUST be HSL. */
+
+@layer base {
+  :root {
+    --background: 210 20% 98%;
+    --foreground: 215 25% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 215 25% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 25% 15%;
+
+    /* Institutional blue */
+    --primary: 210 60% 32%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Light neutral */
+    --secondary: 210 18% 93%;
+    --secondary-foreground: 215 25% 15%;
+
+    --muted: 210 14% 94%;
+    --muted-foreground: 215 12% 50%;
+
+    /* Energy green accent */
+    --accent: 160 45% 40%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 214 20% 88%;
+    --input: 214 20% 88%;
+    --ring: 210 60% 32%;
+
+    --radius: 0.375rem;
+
+    /* Energy-specific tokens */
+    --energy-solar: 45 90% 55%;
+    --energy-wind: 200 70% 50%;
+    --energy-hydro: 210 75% 45%;
+    --energy-thermal: 15 80% 50%;
+    --energy-nuclear: 270 50% 55%;
+    --energy-geothermal: 25 70% 45%;
+    --energy-bio: 120 45% 42%;
+    --energy-other: 215 12% 60%;
+
+    --kpi-bg: 210 30% 96%;
+
+    --sidebar-background: 210 25% 97%;
+    --sidebar-foreground: 215 25% 15%;
+    --sidebar-primary: 210 60% 32%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 18% 93%;
+    --sidebar-accent-foreground: 215 25% 15%;
+    --sidebar-border: 214 20% 88%;
+    --sidebar-ring: 210 60% 32%;
+  }
+
+  .dark {
+    --background: 215 25% 9%;
+    --foreground: 210 20% 92%;
+
+    --card: 215 22% 12%;
+    --card-foreground: 210 20% 92%;
+
+    --popover: 215 22% 12%;
+    --popover-foreground: 210 20% 92%;
+
+    --primary: 210 55% 55%;
+    --primary-foreground: 215 25% 9%;
+
+    --secondary: 215 18% 18%;
+    --secondary-foreground: 210 20% 92%;
+
+    --muted: 215 18% 18%;
+    --muted-foreground: 215 12% 55%;
+
+    --accent: 160 40% 45%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62% 35%;
+    --destructive-foreground: 210 20% 92%;
+
+    --border: 215 18% 20%;
+    --input: 215 18% 20%;
+    --ring: 210 55% 55%;
+
+    --energy-solar: 45 85% 50%;
+    --energy-wind: 200 65% 45%;
+    --energy-hydro: 210 70% 40%;
+    --energy-thermal: 15 75% 45%;
+    --energy-nuclear: 270 45% 50%;
+    --energy-geothermal: 25 65% 40%;
+    --energy-bio: 120 40% 38%;
+    --energy-other: 215 12% 50%;
+
+    --kpi-bg: 215 22% 14%;
+
+    --sidebar-background: 215 25% 10%;
+    --sidebar-foreground: 210 20% 92%;
+    --sidebar-primary: 210 55% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 215 18% 18%;
+    --sidebar-accent-foreground: 210 20% 92%;
+    --sidebar-border: 215 18% 20%;
+    --sidebar-ring: 210 55% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  }
+}
+
+/* MapLibre GL overrides */
+.maplibregl-map {
+  font-family: inherit;
+}
