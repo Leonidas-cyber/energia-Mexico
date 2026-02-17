@@ -6,14 +6,14 @@ export function Header() {
       <div className="container mx-auto flex items-center gap-3">
         <Zap className="h-7 w-7" />
         <div>
-          <h1 className="text-lg font-bold tracking-tight leading-tight">
-            Recursos Energéticos UAM AZC
+          <h1 className="text-lg font-bold tracking-tight leading-tight">Recursos Energéticos
+
           </h1>
-          <p className="text-xs opacity-80">
-            Análisis del Sistema Energético de México
+          <p className="text-xs opacity-80">Análisis del Sistema Energético de México y Mundial.
+
           </p>
         </div>
       </div>
-    </header>
-  );
+    </header>);
+
 }

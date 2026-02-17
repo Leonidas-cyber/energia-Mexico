@@ -1,6 +1,7 @@
 import { useEnergy } from "@/contexts/EnergyContext";
 import { CATEGORIAS_ENERGIA } from "@/types/energy";
 import { MexicoMap } from "@/components/map/MexicoMap";
+import { SolarWindLeafletMap } from "@/components/map/SolarWindLeafletMap";
 import { useMemo, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import type { EnergiaCategoria } from "@/types/energy";
@@ -25,6 +26,10 @@ export function TabPlantas() {
     return map;
   }, [plantasFiltradas]);
 
+  const categoriasConMapa = ["solar", "eolica", "hidroelectrica", "termica", "geotermica"] as const;
+  const usaChoropleth = categoriasConMapa.includes(categoriaActiva as any);
+  const mapMode = "puntos" as const;
+
   return (
     <div className="p-4 space-y-4">
       <h2 className="text-lg font-semibold">Plantas por Energía</h2>
@@ -38,7 +43,6 @@ export function TabPlantas() {
         </Badge>
         {CATEGORIAS_ENERGIA.map((cat) => {
           const count = porCategoria.get(cat.key) || 0;
-          if (count === 0) return null;
           return (
             <Badge
               key={cat.key}
@@ -52,7 +56,16 @@ export function TabPlantas() {
         })}
       </div>
 
-      <MexicoMap plantas={plantasMostradas} modo="puntos" altura="500px" />
+      {usaChoropleth ? (
+        <SolarWindLeafletMap
+          key={categoriaActiva}
+          plantas={plantasMostradas}
+          modo={categoriaActiva as "solar" | "eolica" | "hidroelectrica" | "termica" | "geotermica"}
+          altura="500px"
+        />
+      ) : (
+        <MexicoMap key={mapMode} plantas={plantasMostradas} modo={mapMode} altura="500px" />
+      )}
 
       <div className="border rounded-md overflow-auto max-h-64">
         <table className="w-full text-xs">

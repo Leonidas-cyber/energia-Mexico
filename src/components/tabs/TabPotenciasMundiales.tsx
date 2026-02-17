@@ -1,15 +1,19 @@
 import { useNavigate } from "react-router-dom";
-import { Sun, Wind, Droplets, Flame, Atom, Mountain, Leaf, Zap } from "lucide-react";
+import { Sun, Wind, Droplets, Flame, Atom, Mountain, Leaf, Zap, Factory, Fuel, FlameKindling, Sparkles } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 const ENERGIAS = [
   { key: "solar", label: "Solar", icon: Sun, color: "from-amber-400 to-yellow-500" },
   { key: "eolica", label: "Eólica", icon: Wind, color: "from-sky-400 to-cyan-500" },
   { key: "hidroelectrica", label: "Hidroeléctrica", icon: Droplets, color: "from-blue-500 to-indigo-500" },
-  { key: "termica", label: "Térmica", icon: Flame, color: "from-orange-500 to-red-500" },
+  { key: "termica", label: "Gas Natural (Térmica)", icon: Flame, color: "from-orange-500 to-red-500" },
+  { key: "carboelectrica", label: "Carboeléctrica", icon: Factory, color: "from-gray-600 to-gray-800" },
+  { key: "petroleo", label: "Petróleo", icon: Fuel, color: "from-amber-700 to-amber-900" },
+  { key: "gas_natural", label: "Gas Natural (Reservas)", icon: FlameKindling, color: "from-orange-400 to-orange-600" },
   { key: "nuclear", label: "Nuclear", icon: Atom, color: "from-violet-500 to-purple-600" },
   { key: "geotermica", label: "Geotérmica", icon: Mountain, color: "from-emerald-500 to-teal-600" },
   { key: "bioenergia", label: "Bioenergía", icon: Leaf, color: "from-green-500 to-lime-500" },
+  { key: "hidrogeno_verde", label: "Hidrógeno Verde", icon: Sparkles, color: "from-green-400 to-emerald-600" },
   { key: "otras", label: "Otras", icon: Zap, color: "from-gray-400 to-slate-500" },
 ] as const;
 
@@ -20,7 +24,7 @@ export function TabPotenciasMundiales() {
     <div className="p-4 space-y-4">
       <h2 className="text-lg font-semibold">Potencias Mundiales por Energía</h2>
       <p className="text-sm text-muted-foreground">
-        Selecciona un tipo de energía para explorar los principales países productores.
+        Selecciona un tipo de energía para explorar los principales países productores, sus plantas más grandes y las mayores reservas del mundo.
       </p>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
         {ENERGIAS.map(({ key, label, icon: Icon, color }) => (

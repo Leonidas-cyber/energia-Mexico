@@ -27,12 +27,12 @@ function normalizarTecnologia(tecnologia: string, combustible: string): { catego
   }
 
   // Eólica
-  if (tec.includes("eólica") || tec.includes("eolica")) {
+  if (tec.includes("eólica") || tec.includes("eolica") || tec.includes("eólico") || tec.includes("eolico")) {
     return { categoria: "eolica", subcategoria: "eólica" };
   }
 
   // Hidroeléctrica
-  if (tec.includes("hidro") || tec.includes("hidroeléctrica")) {
+  if (tec.includes("hidro") || tec.includes("hidroeléctrica") || tec.includes("hidráulica") || tec.includes("hidraulica")) {
     return { categoria: "hidroelectrica", subcategoria: "hidroeléctrica" };
   }
 

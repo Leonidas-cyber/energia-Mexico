@@ -52,9 +52,62 @@ const COLORES_ENERGIA: Record<EnergiaCategoria, string> = {
   otras: "#7a8a99",
 };
 
+// Average GHI (kWh/m²/day) by Mexican state — source: Global Solar Atlas / Solargis
+const GHI_POR_ESTADO: Record<string, number> = {
+  "Sonora": 6.2, "Baja California Sur": 6.1, "Baja California": 5.9,
+  "Chihuahua": 5.8, "Durango": 5.7, "Coahuila de Zaragoza": 5.5, "Coahuila": 5.5,
+  "Sinaloa": 5.6, "Zacatecas": 5.6, "Nuevo León": 5.3,
+  "San Luis Potosí": 5.4, "Aguascalientes": 5.5, "Nayarit": 5.3,
+  "Jalisco": 5.4, "Guanajuato": 5.4, "Querétaro": 5.2,
+  "Colima": 5.3, "Michoacán": 5.2, "Michoacán de Ocampo": 5.2,
+  "Guerrero": 5.3, "Oaxaca": 5.3, "Puebla": 5.0,
+  "Tlaxcala": 4.9, "Hidalgo": 4.8, "México": 4.9, "Estado de México": 4.9,
+  "Ciudad de México": 4.8, "Distrito Federal": 4.8,
+  "Morelos": 5.1, "Tamaulipas": 5.1, "Veracruz": 4.5,
+  "Veracruz de Ignacio de la Llave": 4.5,
+  "Tabasco": 4.3, "Campeche": 4.8, "Yucatán": 5.1,
+  "Quintana Roo": 4.9, "Chiapas": 4.7,
+};
+
+// Average wind speed (m/s at 100m) by Mexican state — source: Global Wind Atlas
+const VIENTO_POR_ESTADO: Record<string, number> = {
+  "Oaxaca": 8.5, "Tamaulipas": 7.8, "Baja California": 7.2, "Baja California Sur": 6.8,
+  "Coahuila de Zaragoza": 7.0, "Coahuila": 7.0, "Nuevo León": 6.8,
+  "Zacatecas": 6.5, "Chihuahua": 6.3, "Sonora": 6.0, "Durango": 5.8,
+  "San Luis Potosí": 5.9, "Puebla": 5.7, "Veracruz": 5.5,
+  "Veracruz de Ignacio de la Llave": 5.5, "Hidalgo": 5.3,
+  "Tlaxcala": 5.4, "Querétaro": 5.2, "Guanajuato": 5.0,
+  "Jalisco": 5.1, "Aguascalientes": 5.3, "Sinaloa": 4.8,
+  "Nayarit": 4.5, "Colima": 4.6, "Michoacán": 4.7, "Michoacán de Ocampo": 4.7,
+  "Guerrero": 4.8, "México": 4.3, "Estado de México": 4.3,
+  "Ciudad de México": 3.8, "Distrito Federal": 3.8,
+  "Morelos": 4.0, "Tabasco": 4.2, "Campeche": 5.0,
+  "Yucatán": 5.8, "Quintana Roo": 5.5, "Chiapas": 4.5,
+};
+
+function getGHI(geoName: string): number {
+  if (GHI_POR_ESTADO[geoName]) return GHI_POR_ESTADO[geoName];
+  const norm = normalizarEstado(geoName);
+  for (const [key, val] of Object.entries(GHI_POR_ESTADO)) {
+    const normKey = normalizarEstado(key);
+    if (normKey === norm || norm.startsWith(normKey) || normKey.startsWith(norm)) return val;
+  }
+  return 4.5;
+}
+
+function getViento(geoName: string): number {
+  if (VIENTO_POR_ESTADO[geoName]) return VIENTO_POR_ESTADO[geoName];
+  const norm = normalizarEstado(geoName);
+  for (const [key, val] of Object.entries(VIENTO_POR_ESTADO)) {
+    const normKey = normalizarEstado(key);
+    if (normKey === norm || norm.startsWith(normKey) || normKey.startsWith(norm)) return val;
+  }
+  return 4.5;
+}
+
 interface MexicoMapProps {
   plantas: PlantaEnergia[];
-  modo?: "puntos" | "coropleta-mw" | "coropleta-count";
+  modo?: "puntos" | "coropleta-mw" | "coropleta-count" | "solar" | "eolica";
   altura?: string;
   onPlantaClick?: (planta: PlantaEnergia) => void;
 }
@@ -103,7 +156,7 @@ export function MexicoMap({ plantas, modo = "puntos", altura = "500px", onPlanta
       container: mapContainer.current,
       canvasContextAttributes: { preserveDrawingBuffer: true },
       style: {
-        version: 8,
+        version: 8 as const,
         glyphs: "https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf",
         sources: {
           osm: {
@@ -144,14 +197,18 @@ export function MexicoMap({ plantas, modo = "puntos", altura = "500px", onPlanta
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !mapLoaded) return;
+    let cancelled = false;
 
     // Limpiar capas anteriores
-    ["clusters", "cluster-count", "unclustered-point", "plant-labels"].forEach((id) => {
+    ["states-fill", "states-outline", "clusters", "cluster-count", "unclustered-point", "plant-labels"].forEach((id) => {
       if (map.getLayer(id)) map.removeLayer(id);
     });
+    if (map.getSource("estados")) map.removeSource("estados");
     if (map.getSource("plantas")) map.removeSource("plantas");
 
-    if (modo === "puntos" && plantasGeoJSON.features.length > 0) {
+    const addPointLayers = () => {
+      if (modo !== "puntos" || plantasGeoJSON.features.length === 0) return;
+
       map.addSource("plantas", {
         type: "geojson",
         data: plantasGeoJSON as any,
@@ -160,79 +217,37 @@ export function MexicoMap({ plantas, modo = "puntos", altura = "500px", onPlanta
         clusterRadius: 50,
       });
 
-      // Clusters
       map.addLayer({
-        id: "clusters",
-        type: "circle",
-        source: "plantas",
+        id: "clusters", type: "circle", source: "plantas",
         filter: ["has", "point_count"],
         paint: {
-          "circle-color": [
-            "step",
-            ["get", "point_count"],
-            "#3399cc",
-            10, "#e6b800",
-            50, "#e65c00",
-          ],
-          "circle-radius": [
-            "step",
-            ["get", "point_count"],
-            18,
-            10, 24,
-            50, 32,
-          ],
-          "circle-stroke-width": 2,
-          "circle-stroke-color": "#ffffff",
-          "circle-opacity": 0.85,
+          "circle-color": ["step", ["get", "point_count"], "#3399cc", 10, "#e6b800", 50, "#e65c00"],
+          "circle-radius": ["step", ["get", "point_count"], 18, 10, 24, 50, 32],
+          "circle-stroke-width": 2, "circle-stroke-color": "#ffffff", "circle-opacity": 0.85,
         },
       });
 
-      // Cluster count
       map.addLayer({
-        id: "cluster-count",
-        type: "symbol",
-        source: "plantas",
+        id: "cluster-count", type: "symbol", source: "plantas",
         filter: ["has", "point_count"],
-        layout: {
-          "text-field": "{point_count_abbreviated}",
-          "text-font": ["Open Sans Bold"],
-          "text-size": 13,
-        },
-        paint: {
-          "text-color": "#ffffff",
-        },
+        layout: { "text-field": "{point_count_abbreviated}", "text-font": ["Open Sans Bold"], "text-size": 13 },
+        paint: { "text-color": "#ffffff" },
       });
 
-      // Individual points
       map.addLayer({
-        id: "unclustered-point",
-        type: "circle",
-        source: "plantas",
+        id: "unclustered-point", type: "circle", source: "plantas",
         filter: ["!", ["has", "point_count"]],
         paint: {
           "circle-color": ["get", "color"],
-          "circle-radius": [
-            "interpolate",
-            ["linear"],
-            ["get", "mw"],
-            0, 5,
-            100, 8,
-            500, 12,
-            1000, 16,
-            3000, 22,
-          ],
-          "circle-stroke-width": 1.5,
-          "circle-stroke-color": "#ffffff",
-          "circle-opacity": 0.9,
+          "circle-radius": ["interpolate", ["linear"], ["get", "mw"], 0, 5, 100, 8, 500, 12, 1000, 16, 3000, 22],
+          "circle-stroke-width": 1.5, "circle-stroke-color": "#ffffff", "circle-opacity": 0.9,
         },
       });
 
-      // Popup on click
       map.on("click", "unclustered-point", (e) => {
         const props = e.features?.[0]?.properties;
         if (!props) return;
         const coords = (e.features![0].geometry as any).coordinates.slice();
-
         new maplibregl.Popup({ closeButton: true, maxWidth: "320px" })
           .setLngLat(coords)
           .setHTML(`
@@ -247,146 +262,32 @@ export function MexicoMap({ plantas, modo = "puntos", altura = "500px", onPlanta
             </div>
           `)
           .addTo(map);
-
         if (onPlantaClick) {
           const planta = plantas.find((p) => p.id === props.id);
           if (planta) onPlantaClick(planta);
         }
       });
 
-      // Zoom on cluster click
       map.on("click", "clusters", (e) => {
         const features = map.queryRenderedFeatures(e.point, { layers: ["clusters"] });
         const clusterId = features[0]?.properties?.cluster_id;
         (map.getSource("plantas") as any).getClusterExpansionZoom(clusterId, (err: any, zoom: number) => {
           if (!err) {
-            map.easeTo({
-              center: (features[0].geometry as any).coordinates,
-              zoom,
-            });
+            map.easeTo({ center: (features[0].geometry as any).coordinates, zoom });
           }
         });
       });
 
-      // Cursor
       map.on("mouseenter", "unclustered-point", () => { map.getCanvas().style.cursor = "pointer"; });
       map.on("mouseleave", "unclustered-point", () => { map.getCanvas().style.cursor = ""; });
       map.on("mouseenter", "clusters", () => { map.getCanvas().style.cursor = "pointer"; });
       map.on("mouseleave", "clusters", () => { map.getCanvas().style.cursor = ""; });
-    }
+    };
+
+    addPointLayers();
+
+    return () => { cancelled = true; };
   }, [mapLoaded, plantasGeoJSON, modo, plantas, onPlantaClick]);
-
-  // Cargar coropleta
-  useEffect(() => {
-    const map = mapRef.current;
-    if (!map || !mapLoaded || modo === "puntos") return;
-
-    // Cargar GeoJSON de estados
-    fetch("/mexico-states.geojson")
-      .then((r) => r.json())
-      .then((geojson) => {
-        // Calcular valores por estado
-        const estadoData = new Map<string, { mw: number; count: number; publica: number; privada: number }>();
-        for (const p of plantas) {
-          if (p.estado) {
-            const d = estadoData.get(p.estado) || { mw: 0, count: 0, publica: 0, privada: 0 };
-            d.mw += p.potencia_mw || 0;
-            d.count += 1;
-            if (p.sector === "publica") d.publica += 1;
-            if (p.sector === "privada") d.privada += 1;
-            estadoData.set(p.estado, d);
-          }
-        }
-
-        // Enriquecer features con datos (fuzzy match de nombres)
-        const enriched = {
-          ...geojson,
-          features: geojson.features.map((f: any) => {
-            const geoNombre = f.properties?.name || f.properties?.ESTADO || f.properties?.NOM_ENT || f.properties?.state_name || "";
-            let data = { mw: 0, count: 0, publica: 0, privada: 0 };
-            for (const [csvEstado, csvData] of estadoData.entries()) {
-              if (matchEstado(geoNombre, csvEstado)) {
-                data = csvData;
-                break;
-              }
-            }
-            return {
-              ...f,
-              properties: {
-                ...f.properties,
-                mw_total: Math.round(data.mw),
-                plant_count: data.count,
-                publica: data.publica,
-                privada: data.privada,
-              },
-            };
-          }),
-        };
-
-        // Remove existing layers
-        ["states-fill", "states-outline", "states-label"].forEach((id) => {
-          if (map.getLayer(id)) map.removeLayer(id);
-        });
-        if (map.getSource("estados")) map.removeSource("estados");
-
-        map.addSource("estados", { type: "geojson", data: enriched });
-
-        const metric = modo === "coropleta-mw" ? "mw_total" : "plant_count";
-        const maxVal = Math.max(...Array.from(estadoData.values()).map((d) => modo === "coropleta-mw" ? d.mw : d.count), 1);
-
-        map.addLayer({
-          id: "states-fill",
-          type: "fill",
-          source: "estados",
-          paint: {
-            "fill-color": [
-              "interpolate",
-              ["linear"],
-              ["get", metric],
-              0, "#e8f4e8",
-              maxVal * 0.2, "#a8d5ba",
-              maxVal * 0.4, "#5fa87d",
-              maxVal * 0.7, "#2d7a53",
-              maxVal, "#0a4d2e",
-            ],
-            "fill-opacity": 0.7,
-          },
-        }, map.getLayer("unclustered-point") ? "unclustered-point" : undefined);
-
-        map.addLayer({
-          id: "states-outline",
-          type: "line",
-          source: "estados",
-          paint: {
-            "line-color": "#1a5632",
-            "line-width": 1,
-            "line-opacity": 0.6,
-          },
-        });
-
-        // Popup on click
-        map.on("click", "states-fill", (e) => {
-          const props = e.features?.[0]?.properties;
-          if (!props) return;
-          const nombre = props.name || props.ESTADO || props.NOM_ENT || props.state_name || "Desconocido";
-          new maplibregl.Popup({ closeButton: true })
-            .setLngLat(e.lngLat)
-            .setHTML(`
-              <div style="font-family:sans-serif;font-size:12px;line-height:1.5">
-                <strong style="font-size:13px">${nombre}</strong><br/>
-                <span style="color:#666">Potencia:</span> <strong>${Number(props.mw_total || 0).toLocaleString()} MW</strong><br/>
-                <span style="color:#666">Plantas:</span> ${props.plant_count || 0}<br/>
-                <span style="color:#666">Pública:</span> ${props.publica || 0} | <span style="color:#666">Privada:</span> ${props.privada || 0}
-              </div>
-            `)
-            .addTo(map);
-        });
-
-        map.on("mouseenter", "states-fill", () => { map.getCanvas().style.cursor = "pointer"; });
-        map.on("mouseleave", "states-fill", () => { map.getCanvas().style.cursor = ""; });
-      })
-      .catch(console.error);
-  }, [mapLoaded, modo, plantas]);
 
   return (
     <div className="relative rounded-md border overflow-hidden" style={{ height: altura }}>

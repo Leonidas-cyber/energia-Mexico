@@ -9,10 +9,18 @@ import { TabPotenciaEstado } from "@/components/tabs/TabPotenciaEstado";
 import { TabPlantasEstado } from "@/components/tabs/TabPlantasEstado";
 import { TabDuenos } from "@/components/tabs/TabDuenos";
 import { TabPotenciasMundiales } from "@/components/tabs/TabPotenciasMundiales";
-
 import { TabGasoductos } from "@/components/tabs/TabGasoductos";
+import { useSearchParams } from "react-router-dom";
+
+const TAB_MAP: Record<string, string> = {
+  potencias: "potencias-mundiales",
+};
 
 const Index = () => {
+  const [searchParams] = useSearchParams();
+  const tabParam = searchParams.get("tab");
+  const defaultTab = (tabParam && TAB_MAP[tabParam]) || tabParam || "plantas";
+
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <Header />
@@ -20,7 +28,7 @@ const Index = () => {
       <FilterPanel />
 
       <main className="flex-1 container mx-auto px-4 py-4">
-        <Tabs defaultValue="plantas" className="w-full">
+        <Tabs defaultValue={defaultTab} className="w-full">
           <TabsList className="w-full flex flex-wrap h-auto gap-1">
             <TabsTrigger value="sen" className="text-xs">SEN: Transmisión</TabsTrigger>
             <TabsTrigger value="plantas" className="text-xs">Plantas por Energía</TabsTrigger>
