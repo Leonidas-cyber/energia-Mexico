@@ -8,7 +8,8 @@ import { TabPlantas } from "@/components/tabs/TabPlantas";
 import { TabPotenciaEstado } from "@/components/tabs/TabPotenciaEstado";
 import { TabPlantasEstado } from "@/components/tabs/TabPlantasEstado";
 import { TabDuenos } from "@/components/tabs/TabDuenos";
-import { TabDiapositiva } from "@/components/tabs/TabDiapositiva";
+import { TabPotenciasMundiales } from "@/components/tabs/TabPotenciasMundiales";
+
 import { TabGasoductos } from "@/components/tabs/TabGasoductos";
 
 const Index = () => {
@@ -27,7 +28,7 @@ const Index = () => {
             <TabsTrigger value="plantas-estado" className="text-xs">Plantas por Estado</TabsTrigger>
             <TabsTrigger value="duenos" className="text-xs">Propiedad y Dueños</TabsTrigger>
             <TabsTrigger value="gasoductos" className="text-xs">Gasoductos</TabsTrigger>
-            <TabsTrigger value="diapositiva" className="text-xs">Diapositiva / Evaluación</TabsTrigger>
+            <TabsTrigger value="potencias-mundiales" className="text-xs">Potencias Mundiales</TabsTrigger>
           </TabsList>
 
           <TabsContent value="sen"><TabSEN /></TabsContent>
@@ -36,7 +37,7 @@ const Index = () => {
           <TabsContent value="plantas-estado"><TabPlantasEstado /></TabsContent>
           <TabsContent value="duenos"><TabDuenos /></TabsContent>
           <TabsContent value="gasoductos"><TabGasoductos /></TabsContent>
-          <TabsContent value="diapositiva"><TabDiapositiva /></TabsContent>
+          <TabsContent value="potencias-mundiales"><TabPotenciasMundiales /></TabsContent>
         </Tabs>
       </main>
 

@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { EnergyProvider } from "@/contexts/EnergyContext";
 import Index from "./pages/Index";
+import PotenciasMundiales from "./pages/PotenciasMundiales";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -18,6 +19,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/potencias-mundiales/:tipo" element={<PotenciasMundiales />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
