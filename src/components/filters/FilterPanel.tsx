@@ -1,6 +1,5 @@
 import { useEnergy } from "@/contexts/EnergyContext";
 import { CATEGORIAS_ENERGIA } from "@/types/energy";
-import { ESTADOS_MEXICO } from "@/data/sampleData";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Filter, X } from "lucide-react";
@@ -23,12 +22,12 @@ export function FilterPanel() {
   }, [filtros]);
 
   const estadosDisponibles = useMemo(
-    () => [...new Set(plantasRaw.map((p) => p.estado).filter(Boolean))].sort(),
+    () => [...new Set(plantasRaw.map((p) => p.estado).filter(Boolean))].sort((a, b) => a.localeCompare(b, "es", { sensitivity: "base" })),
     [plantasRaw]
   );
 
   const duenosDisponibles = useMemo(
-    () => [...new Set(plantasRaw.map((p) => p.dueno).filter(Boolean))].sort(),
+    () => [...new Set(plantasRaw.map((p) => p.dueno).filter(Boolean))].sort((a, b) => a.localeCompare(b, "es", { sensitivity: "base" })),
     [plantasRaw]
   );
 
