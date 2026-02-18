@@ -244,7 +244,7 @@ export function MexicoMap({ plantas, modo = "puntos", altura = "500px", onPlanta
         },
       });
 
-      map.on("click", "unclustered-point", (e) => {
+      const handleUnclusteredClick = (e: any) => {
         const props = e.features?.[0]?.properties;
         if (!props) return;
         const coords = (e.features![0].geometry as any).coordinates.slice();
@@ -266,27 +266,98 @@ export function MexicoMap({ plantas, modo = "puntos", altura = "500px", onPlanta
           const planta = plantas.find((p) => p.id === props.id);
           if (planta) onPlantaClick(planta);
         }
-      });
+      };
 
-      map.on("click", "clusters", (e) => {
+      const handleClusterClick = (e: any) => {
         const features = map.queryRenderedFeatures(e.point, { layers: ["clusters"] });
-        const clusterId = features[0]?.properties?.cluster_id;
-        (map.getSource("plantas") as any).getClusterExpansionZoom(clusterId, (err: any, zoom: number) => {
+        if (!features.length) return;
+
+        const source = map.getSource("plantas") as any;
+        const clusterFeature = features[0] as any;
+        const clusterId = clusterFeature?.properties?.cluster_id;
+        const pointCount = Number(clusterFeature?.properties?.point_count ?? 0);
+        const clusterCenter = (clusterFeature.geometry as any).coordinates;
+
+        if (!source || clusterId == null) return;
+
+        // Si el clúster ya tiene 2 (o menos) centrales, mostrar ambas.
+        if (pointCount <= 2) {
+          source.getClusterLeaves(clusterId, 2, 0, (err: any, leaves: any[]) => {
+            if (err || !Array.isArray(leaves) || leaves.length === 0) return;
+
+            const body = leaves.slice(0, 2).map((leaf: any, idx: number) => {
+              const p = leaf?.properties || {};
+              return `
+                <div style="padding:${idx > 0 ? "8px 0 0" : "0"}">
+                  <strong style="font-size:12px">${p.nombre ?? "Central"}</strong><br/>
+                  <span style="color:#666">Energía:</span> ${p.categoria ?? "N/D"} (${p.subcategoria ?? "N/D"})<br/>
+                  <span style="color:#666">Potencia:</span> <strong>${Number(p.mw ?? 0).toLocaleString()} MW</strong><br/>
+                  <span style="color:#666">Sector:</span> ${p.sector ?? "N/D"}<br/>
+                  <span style="color:#666">Dueño:</span> ${p.dueno ?? "N/D"}<br/>
+                  <span style="color:#666">Estado:</span> ${p.estado ?? "N/D"}
+                </div>
+              `;
+            }).join('<hr style="margin:8px 0; border:none; border-top:1px solid #eee"/>');
+
+            new maplibregl.Popup({ closeButton: true, maxWidth: "360px" })
+              .setLngLat(clusterCenter)
+              .setHTML(`
+                <div style="font-family:sans-serif;font-size:12px;line-height:1.45">
+                  <strong style="font-size:13px">${leaves.length === 1 ? "Central" : "2 centrales"}</strong><br/>
+                  ${body}
+                </div>
+              `)
+              .addTo(map);
+
+            // Enfocar para ver claramente ambas centrales.
+            if (leaves.length === 2) {
+              const c1 = (leaves[0].geometry as any).coordinates;
+              const c2 = (leaves[1].geometry as any).coordinates;
+              const bounds = new maplibregl.LngLatBounds(c1, c1);
+              bounds.extend(c2);
+              map.fitBounds(bounds, { padding: 90, maxZoom: 14.5, duration: 700 });
+            } else {
+              map.easeTo({ center: (leaves[0].geometry as any).coordinates, zoom: 14.5, duration: 700 });
+            }
+          });
+          return;
+        }
+
+        // Zoom de expansión + extra para acercarse más rápido a centrales.
+        source.getClusterExpansionZoom(clusterId, (err: any, zoom: number) => {
           if (!err) {
-            map.easeTo({ center: (features[0].geometry as any).coordinates, zoom });
+            map.easeTo({ center: clusterCenter, zoom: Math.min(zoom + 1.2, 15), duration: 650 });
           }
         });
-      });
+      };
 
-      map.on("mouseenter", "unclustered-point", () => { map.getCanvas().style.cursor = "pointer"; });
-      map.on("mouseleave", "unclustered-point", () => { map.getCanvas().style.cursor = ""; });
-      map.on("mouseenter", "clusters", () => { map.getCanvas().style.cursor = "pointer"; });
-      map.on("mouseleave", "clusters", () => { map.getCanvas().style.cursor = ""; });
+      const handleMouseEnter = () => { map.getCanvas().style.cursor = "pointer"; };
+      const handleMouseLeave = () => { map.getCanvas().style.cursor = ""; };
+
+      map.on("click", "unclustered-point", handleUnclusteredClick);
+      map.on("click", "clusters", handleClusterClick);
+      map.on("mouseenter", "unclustered-point", handleMouseEnter);
+      map.on("mouseleave", "unclustered-point", handleMouseLeave);
+      map.on("mouseenter", "clusters", handleMouseEnter);
+      map.on("mouseleave", "clusters", handleMouseLeave);
+
+      // Evita listeners duplicados al cambiar filtros/categorías.
+      return () => {
+        map.off("click", "unclustered-point", handleUnclusteredClick);
+        map.off("click", "clusters", handleClusterClick);
+        map.off("mouseenter", "unclustered-point", handleMouseEnter);
+        map.off("mouseleave", "unclustered-point", handleMouseLeave);
+        map.off("mouseenter", "clusters", handleMouseEnter);
+        map.off("mouseleave", "clusters", handleMouseLeave);
+      };
     };
 
-    addPointLayers();
+    const cleanupPointLayers = addPointLayers();
 
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+      if (typeof cleanupPointLayers === "function") cleanupPointLayers();
+    };
   }, [mapLoaded, plantasGeoJSON, modo, plantas, onPlantaClick]);
 
   return (
