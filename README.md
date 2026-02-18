@@ -1,73 +1,216 @@
-# Welcome to your Lovable project
+# Mapas de Energía – Recursos Energéticos
 
-## Project info
+Aplicación web interactiva para visualizar, analizar y exportar información energética de México (y comparativas mundiales), desarrollada como proyecto académico para la materia **Recursos Energéticos**.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+---
 
-## How can I edit this code?
+## Descripción
 
-There are several ways of editing your application.
+Este proyecto integra datos geoespaciales (GeoJSON) y tabulares (CSV) para generar mapas temáticos energéticos con filtros dinámicos, indicadores (KPIs) y herramientas de exportación para reportes y presentaciones.
 
-**Use Lovable**
+---
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+## Objetivo académico
 
-Changes made via Lovable will be committed automatically to this repo.
+Construir una herramienta visual para apoyar el análisis de:
 
-**Use your preferred IDE**
+- Infraestructura energética nacional (ductos y red del SEN).
+- Distribución de plantas por tipo de energía.
+- Potencia instalada y número de plantas por estado.
+- Comparativas mundiales por tipo de energía.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+---
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## Funcionalidades principales
 
-Follow these steps:
+### A) Mapas de México
+1. **Ductos** (líneas).
+2. **SEN** (líneas/red).
+3. **Plantas por tipo de energía** (solar, eólica, hidro, geotérmica, térmica, etc.).
+4. **Potencia total por estado** (coropleta).
+5. **Número de plantas por estado** (coropleta).
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### B) Mapas mundiales
+6. **Top 5 potencias por energía**.
+7. **Posición de México por tipo de energía** (vista + ranking).
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### C) Análisis adicional
+- Filtros por energía, estado, sector y propietario.
+- Indicadores de calidad de datos.
+- Exportación de mapa a imagen.
+- Datos listos para apoyo en diapositivas y reporte académico.
 
-# Step 3: Install the necessary dependencies.
-npm i
+---
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+## Tecnologías utilizadas
+
+- **Vite**
+- **TypeScript**
+- **React**
+- **Tailwind CSS**
+- **shadcn/ui**
+- Librería de mapas web (según implementación actual del proyecto)
+
+---
+
+## Requisitos
+
+- **Node.js 18+**
+- **npm 9+**
+
+Verifica con:
+
+```bash
+node -v
+npm -v
+```
+
+---
+
+## Instalación y ejecución local
+
+```bash
+# 1) Clonar repositorio
+git clone <URL_DEL_REPOSITORIO>
+
+# 2) Entrar al proyecto
+cd <NOMBRE_DEL_PROYECTO>
+
+# 3) Instalar dependencias
+npm install
+
+# 4) Ejecutar en modo desarrollo
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+La aplicación estará disponible en `http://localhost:5173` (o el puerto que asigne Vite).
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+---
 
-**Use GitHub Codespaces**
+## Scripts disponibles
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+```bash
+npm run dev      # Servidor de desarrollo
+npm run build    # Compilación para producción
+npm run preview  # Vista previa de la build
+npm run lint     # Revisión de estilo/código
+```
 
-## What technologies are used for this project?
+---
 
-This project is built with:
+## Estructura sugerida del proyecto
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+```text
+.
+├── public/
+│   └── data/                  # Archivos CSV/GeoJSON base
+├── src/
+│   ├── components/            # UI (filtros, paneles, tabs)
+│   ├── pages/                 # Vistas principales
+│   ├── utils/                 # Parser CSV, KPIs, exportación
+│   ├── hooks/                 # Lógica reutilizable
+│   └── types/                 # Tipos TypeScript
+├── package.json
+└── README.md
+```
 
-## How can I deploy this project?
+---
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+## Datos de entrada esperados
 
-## Can I connect a custom domain to my Lovable project?
+Archivos recomendados:
 
-Yes, you can!
+- `mx_estados.geojson` (polígonos por estado)
+- `ductos.geojson` (líneas de ductos)
+- `sen.geojson` (infraestructura/red SEN)
+- `centrales.csv` (catálogo de plantas)
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+### Campos sugeridos para `centrales.csv`
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+- `nombre`
+- `lat` / `lon`
+- `estado`
+- `tecnologia` o `tipo_energia`
+- `capacidad_mw`
+- `sector` (público/privado)
+- `propietario` (si aplica)
+
+---
+
+## Flujo de uso
+
+1. Cargar/validar archivos base (GeoJSON y CSV).
+2. Seleccionar tipo de mapa (ductos, SEN, plantas, coropletas).
+3. Aplicar filtros (energía/estado/sector/propietario).
+4. Revisar KPIs y resultados.
+5. Exportar mapa para reporte o presentación.
+
+---
+
+## Fuentes de datos
+
+Para capas, validación y contexto energético se consultaron:
+
+1. **Open Infrastructure Map (OpenInfraMap) – México**
+   - https://openinframap.org/stats/area/Mexico/plants
+   - Uso: referencia de plantas eléctricas y estadísticas agregadas.
+
+2. **PLANEAS – Sistema Eléctrico Nacional**
+   - https://energia.conacyt.mx/planeas/electricidad/sistema-electrico-nacional
+   - Uso: referencia para capa y contexto del SEN.
+
+3. **PLANEAS – Transmisión**
+   - https://energia.conacyt.mx/planeas/electricidad/transmision
+   - Uso: referencia para red de transmisión eléctrica.
+
+4. **CFEnergía – Gasoductos**
+   - https://www.cfenergia.com/gasoductos/
+   - Uso: referencia para infraestructura de gasoductos.
+
+### Fecha de consulta
+- **Febrero 2026**
+
+### Nota de uso académico
+Antes de publicar o redistribuir datos, revisar términos de uso/licenciamiento en cada fuente oficial.
+
+---
+
+## Solución de problemas comunes
+
+- **No aparecen capas en el mapa**
+  - Verificar rutas de archivos y nombres de columnas.
+  - Confirmar coordenadas (`lat/lon`) válidas.
+
+- **Error de parsing CSV**
+  - Revisar delimitador (`,` o `;`), comillas y encabezados.
+
+- **Falla de build**
+  ```bash
+  npm install
+  npm run lint
+  npm run build
+  ```
+
+---
+
+## Mejoras futuras (opcional)
+
+- Carga diferida por módulos (lazy loading).
+- Procesamiento CSV en Web Worker.
+- Persistencia de filtros en URL.
+- Exportación de datos filtrados en CSV.
+- Pruebas automáticas de parser y KPIs.
+
+---
+
+## Contexto académico
+
+Proyecto desarrollado para la materia **Recursos Energéticos**, con enfoque en análisis técnico y visualización de información energética para apoyo en evaluación y exposición.
+
+---
+
+## Autor
+
+- **Leonardo Gonzalez**
+- Ingeniería Eléctrica
+
