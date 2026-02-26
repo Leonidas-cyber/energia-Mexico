@@ -1,5 +1,6 @@
 import { useEnergy } from "@/contexts/EnergyContext";
 import { CATEGORIAS_ENERGIA } from "@/types/energy";
+import { ESTADOS_MEXICO } from "@/data/sampleData";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Filter, X } from "lucide-react";
@@ -22,12 +23,12 @@ export function FilterPanel() {
   }, [filtros]);
 
   const estadosDisponibles = useMemo(
-    () => [...new Set(plantasRaw.map((p) => p.estado).filter(Boolean))].sort((a, b) => a.localeCompare(b, "es", { sensitivity: "base" })),
+    () => [...new Set(plantasRaw.map((p) => p.estado).filter(Boolean))].sort(),
     [plantasRaw]
   );
 
   const duenosDisponibles = useMemo(
-    () => [...new Set(plantasRaw.map((p) => p.dueno).filter(Boolean))].sort((a, b) => a.localeCompare(b, "es", { sensitivity: "base" })),
+    () => [...new Set(plantasRaw.map((p) => p.dueno).filter(Boolean))].sort(),
     [plantasRaw]
   );
 
@@ -37,7 +38,7 @@ export function FilterPanel() {
 
   return (
     <Collapsible open={open} onOpenChange={setOpen} className="border-b bg-card">
-      <div className="container mx-auto px-4 py-1">
+      <div className="container mx-auto px-2 sm:px-4 py-1">
         <CollapsibleTrigger asChild>
           <Button variant="ghost" size="sm" className="gap-2 text-xs">
             <Filter className="h-3.5 w-3.5" />
@@ -56,7 +57,7 @@ export function FilterPanel() {
         )}
       </div>
       <CollapsibleContent>
-        <div className="container mx-auto px-4 pb-3 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 text-xs">
+        <div className="container mx-auto px-2 sm:px-4 pb-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 text-xs">
           {/* Categoría de energía */}
           <div>
             <p className="font-medium mb-1.5 text-muted-foreground">Tipo de Energía</p>

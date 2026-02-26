@@ -33,6 +33,23 @@ export interface MexicoComparacion {
   plantaMasGrande: PlantaGrande;
 }
 
+export interface EconomiaEnergia {
+  contribucionPIB: { pais: string; codigo: string; porcentaje: number; descripcion: string }[];
+  inversionAnual: { pais: string; codigo: string; monto: number; moneda: string }[];
+  mexico: { contribucionPIB: number; inversionAnual: number; moneda: string; nota: string };
+}
+
+export interface TendenciaAnual {
+  año: number;
+  [pais: string]: number; // GW per country
+}
+
+export interface TendenciasHistoricas {
+  titulo: string;
+  paises: { codigo: string; nombre: string; color: string }[];
+  datos: TendenciaAnual[];
+}
+
 export interface PotenciaMundialData {
   titulo: string;
   subtitulo: string;
@@ -49,6 +66,10 @@ export interface PotenciaMundialData {
     top5: Reserva[];
     mexico?: Reserva;
   };
+  /** Economic impact */
+  economia?: EconomiaEnergia;
+  /** Historical capacity trends */
+  tendencias?: TendenciasHistoricas;
 }
 
 export const POTENCIAS_DATA: Record<string, PotenciaMundialData> = {
@@ -78,6 +99,23 @@ export const POTENCIAS_DATA: Record<string, PotenciaMundialData> = {
       { pais: "Japón", codigo: "JP", capacidadGW: 87.0, porcentajeMundial: 6.1, descripcion: "Pionero en tecnología solar, con despliegue masivo post-Fukushima.", dato_clave: "Mayor densidad solar per cápita entre las grandes economías.", plantaMasGrande: { nombre: "Setouchi Kirei Solar Power Plant", capacidadMW: 235, ubicacion: "Okayama", coords: [134.1, 34.6] } },
       { pais: "Alemania", codigo: "DE", capacidadGW: 81.7, porcentajeMundial: 5.8, descripcion: "Pionero europeo con la Energiewende. Alta penetración en techos residenciales.", dato_clave: "En días soleados, la solar cubre más del 50% de la demanda eléctrica.", plantaMasGrande: { nombre: "Solarpark Witznitz", capacidadMW: 650, ubicacion: "Sajonia", coords: [12.4, 51.2] } },
     ],
+    economia: {
+      contribucionPIB: [
+        { pais: "China", codigo: "CN", porcentaje: 1.8, descripcion: "La industria solar emplea a 4.7 millones de personas y representa una parte creciente de las exportaciones" },
+        { pais: "Estados Unidos", codigo: "US", porcentaje: 0.5, descripcion: "250,000+ empleos directos en solar, créditos fiscales IRA impulsan inversión" },
+        { pais: "India", codigo: "IN", porcentaje: 0.4, descripcion: "Solar como motor de desarrollo rural y acceso energético" },
+        { pais: "Alemania", codigo: "DE", porcentaje: 0.6, descripcion: "Industria solar integrada a la Energiewende" },
+        { pais: "Japón", codigo: "JP", porcentaje: 0.3, descripcion: "Tecnología de paneles de alta eficiencia como exportación clave" },
+      ],
+      inversionAnual: [
+        { pais: "China", codigo: "CN", monto: 130, moneda: "USD bn" },
+        { pais: "Estados Unidos", codigo: "US", monto: 50, moneda: "USD bn" },
+        { pais: "India", codigo: "IN", monto: 20, moneda: "USD bn" },
+        { pais: "Alemania", codigo: "DE", monto: 16, moneda: "USD bn" },
+        { pais: "Japón", codigo: "JP", monto: 12, moneda: "USD bn" },
+      ],
+      mexico: { contribucionPIB: 0.15, inversionAnual: 3.5, moneda: "USD bn", nota: "Crecimiento acelerado post-subastas de largo plazo, pero incertidumbre regulatoria frena inversión" },
+    },
     mexico: { capacidadGW: 12.3, rankingMundial: 14, fortalezas: "Irradiación solar excepcional (5.5-6.5 kWh/m²/día en el noroeste).", retos: "Incertidumbre regulatoria y limitada infraestructura de transmisión.", potencial: "Podría quintuplicar su capacidad solar aprovechando el Desierto de Sonora.", plantaMasGrande: { nombre: "Parque Solar Villanueva", capacidadMW: 828, ubicacion: "Viesca, Coahuila", coords: [-102.8, 25.3] } },
   },
   eolica: {
@@ -105,6 +143,23 @@ export const POTENCIAS_DATA: Record<string, PotenciaMundialData> = {
       { pais: "India", codigo: "IN", capacidadGW: 46.2, porcentajeMundial: 4.5, descripcion: "Concentrada en Tamil Nadu, Gujarat y Rajasthan.", dato_clave: "Potencial eólico estimado de 302 GW a 100m.", plantaMasGrande: { nombre: "Muppandal Wind Farm", capacidadMW: 1500, ubicacion: "Tamil Nadu", coords: [77.5, 8.2] } },
       { pais: "Brasil", codigo: "BR", capacidadGW: 30.2, porcentajeMundial: 3.0, descripcion: "Líder latinoamericano con parques eólicos en el nordeste.", dato_clave: "La eólica representa más del 12% de la generación eléctrica.", plantaMasGrande: { nombre: "Complexo Eólico Lagoa dos Ventos", capacidadMW: 716, ubicacion: "Piauí", coords: [-41.6, -8.5] } },
     ],
+    economia: {
+      contribucionPIB: [
+        { pais: "Dinamarca", codigo: "DK", porcentaje: 3.2, descripcion: "Vestas y Ørsted son líderes mundiales, eólica es pilar de exportaciones" },
+        { pais: "China", codigo: "CN", porcentaje: 0.9, descripcion: "Mayor fabricante de turbinas, emplea a 1.3 millones de personas" },
+        { pais: "Alemania", codigo: "DE", porcentaje: 1.1, descripcion: "Siemens Gamesa y cadena de suministro industrial clave" },
+        { pais: "Estados Unidos", codigo: "US", porcentaje: 0.4, descripcion: "120,000+ empleos directos, manufactura de turbinas en crecimiento" },
+        { pais: "Brasil", codigo: "BR", porcentaje: 0.5, descripcion: "Inversión extranjera y empleo en el nordeste" },
+      ],
+      inversionAnual: [
+        { pais: "China", codigo: "CN", monto: 75, moneda: "USD bn" },
+        { pais: "Estados Unidos", codigo: "US", monto: 25, moneda: "USD bn" },
+        { pais: "Alemania", codigo: "DE", monto: 12, moneda: "USD bn" },
+        { pais: "Reino Unido", codigo: "GB", monto: 15, moneda: "USD bn" },
+        { pais: "Brasil", codigo: "BR", monto: 6, moneda: "USD bn" },
+      ],
+      mexico: { contribucionPIB: 0.1, inversionAnual: 1.2, moneda: "USD bn", nota: "Concentrada en Oaxaca y Tamaulipas, conflictos sociales limitan expansión" },
+    },
     mexico: { capacidadGW: 7.3, rankingMundial: 18, fortalezas: "Istmo de Tehuantepec con vientos clase mundial (>8 m/s).", retos: "Conflictos sociales y capacidad de transmisión limitada desde Oaxaca.", potencial: "Potencial de 50+ GW en Oaxaca, Tamaulipas, Baja California y Zacatecas.", plantaMasGrande: { nombre: "Parque Eólico Reynosa", capacidadMW: 424, ubicacion: "Reynosa, Tamaulipas", coords: [-98.3, 26.1] } },
   },
   hidroelectrica: {
@@ -132,6 +187,23 @@ export const POTENCIAS_DATA: Record<string, PotenciaMundialData> = {
       { pais: "Canadá", codigo: "CA", capacidadGW: 82.0, porcentajeMundial: 5.8, descripcion: "Quebec y British Columbia potencias hidro. Exporta electricidad limpia a EE.UU.", dato_clave: "El 60% de la electricidad canadiense es hidro.", plantaMasGrande: { nombre: "Robert-Bourassa (La Grande-2)", capacidadMW: 5616, ubicacion: "Quebec", coords: [-77.0, 53.8] } },
       { pais: "India", codigo: "IN", capacidadGW: 52.0, porcentajeMundial: 3.7, descripcion: "Ríos himalayos como fuente principal.", dato_clave: "Potencial sin explotar de 145 GW.", plantaMasGrande: { nombre: "Tehri Dam", capacidadMW: 2400, ubicacion: "Uttarakhand", coords: [78.5, 30.4] } },
     ],
+    economia: {
+      contribucionPIB: [
+        { pais: "Brasil", codigo: "BR", porcentaje: 2.5, descripcion: "Itaipú y sistema hidro son la columna vertebral energética, subsidian industria" },
+        { pais: "Canadá", codigo: "CA", porcentaje: 1.8, descripcion: "Hidroelectricidad barata impulsa industria del aluminio y minería" },
+        { pais: "Noruega", codigo: "NO", porcentaje: 3.5, descripcion: "99% de electricidad es hidro, base de competitividad industrial" },
+        { pais: "China", codigo: "CN", porcentaje: 0.8, descripcion: "Tres Gargantas y mega-presas son proyectos estratégicos nacionales" },
+        { pais: "Estados Unidos", codigo: "US", porcentaje: 0.3, descripcion: "Infraestructura madura, principalmente en el noroeste del Pacífico" },
+      ],
+      inversionAnual: [
+        { pais: "China", codigo: "CN", monto: 30, moneda: "USD bn" },
+        { pais: "Brasil", codigo: "BR", monto: 8, moneda: "USD bn" },
+        { pais: "India", codigo: "IN", monto: 5, moneda: "USD bn" },
+        { pais: "Canadá", codigo: "CA", monto: 4, moneda: "USD bn" },
+        { pais: "Estados Unidos", codigo: "US", monto: 3.5, moneda: "USD bn" },
+      ],
+      mexico: { contribucionPIB: 0.2, inversionAnual: 0.5, moneda: "USD bn", nota: "Sistema hidroeléctrico maduro con Chicoasén y Malpaso; inversión enfocada en mantenimiento" },
+    },
     mexico: { capacidadGW: 12.6, rankingMundial: 22, fortalezas: "Ríos Grijalva-Usumacinta con cascada de presas.", retos: "Sequías crecientes y sedimentación de embalses.", potencial: "Potencial remanente ~5 GW, enfoque en mini y micro hidro.", plantaMasGrande: { nombre: "C.H. Manuel Moreno Torres (Chicoasén)", capacidadMW: 2400, ubicacion: "Chiapas", coords: [-93.1, 16.9] } },
   },
   termica: {
@@ -159,6 +231,23 @@ export const POTENCIAS_DATA: Record<string, PotenciaMundialData> = {
       { pais: "Japón", codigo: "JP", capacidadGW: 140.0, porcentajeMundial: 7.4, descripcion: "Mayor importador mundial de GNL. Post-Fukushima incrementó uso de gas.", dato_clave: "El GNL genera ~35% de la electricidad japonesa.", plantaMasGrande: { nombre: "Futtsu Power Station", capacidadMW: 5040, ubicacion: "Chiba", coords: [139.8, 35.3] } },
       { pais: "Arabia Saudita", codigo: "SA", capacidadGW: 85.0, porcentajeMundial: 4.5, descripcion: "Transición de petróleo a gas para generación eléctrica. Vision 2030.", dato_clave: "Arabia Saudita quemaba petróleo para generar electricidad hasta hace pocos años.", plantaMasGrande: { nombre: "Qurayyah Combined Cycle Plant", capacidadMW: 3927, ubicacion: "Provincia Oriental", coords: [50.1, 26.1] } },
     ],
+    economia: {
+      contribucionPIB: [
+        { pais: "Rusia", codigo: "RU", porcentaje: 12.0, descripcion: "Gazprom es la mayor empresa de gas del mundo, pilar del PIB ruso" },
+        { pais: "Qatar", codigo: "QA", porcentaje: 25.0, descripcion: "GNL es la fuente principal de ingresos y riqueza per cápita" },
+        { pais: "Arabia Saudita", codigo: "SA", porcentaje: 5.0, descripcion: "Transición de petróleo a gas para diversificar economía" },
+        { pais: "Estados Unidos", codigo: "US", porcentaje: 2.5, descripcion: "Revolución del shale gas generó millones de empleos y redujo precios energéticos" },
+        { pais: "Irán", codigo: "IR", porcentaje: 8.0, descripcion: "Gas subsidiado impulsa industria petroquímica" },
+      ],
+      inversionAnual: [
+        { pais: "Estados Unidos", codigo: "US", monto: 45, moneda: "USD bn" },
+        { pais: "China", codigo: "CN", monto: 35, moneda: "USD bn" },
+        { pais: "Rusia", codigo: "RU", monto: 20, moneda: "USD bn" },
+        { pais: "Qatar", codigo: "QA", monto: 18, moneda: "USD bn" },
+        { pais: "Arabia Saudita", codigo: "SA", monto: 12, moneda: "USD bn" },
+      ],
+      mexico: { contribucionPIB: 1.5, inversionAnual: 4.0, moneda: "USD bn", nota: "Gas natural vía gasoductos de EE.UU. reduce costos pero genera dependencia; PEMEX produce poco gas" },
+    },
     mexico: { capacidadGW: 35.0, rankingMundial: 12, fortalezas: "Infraestructura moderna de ciclo combinado, gas importado barato de EE.UU. vía gasoductos transfronterizos.", retos: "Alta dependencia del gas importado (~70%), vulnerabilidad geopolítica.", potencial: "Transición a ciclos combinados de alta eficiencia para reducir emisiones.", plantaMasGrande: { nombre: "Central de Ciclo Combinado Norte III", capacidadMW: 907, ubicacion: "Ciudad Juárez, Chihuahua", coords: [-106.4, 31.7] } },
   },
   carboelectrica: {
@@ -186,6 +275,23 @@ export const POTENCIAS_DATA: Record<string, PotenciaMundialData> = {
       { pais: "Japón", codigo: "JP", capacidadGW: 47.0, porcentajeMundial: 2.2, descripcion: "Plantas de carbón de ultra alta eficiencia (USC). Aún depende del carbón importado.", dato_clave: "Japón tiene las plantas de carbón más eficientes del mundo.", plantaMasGrande: { nombre: "Hekinan Thermal Power Station", capacidadMW: 4100, ubicacion: "Aichi", coords: [136.9, 34.8] } },
       { pais: "Indonesia", codigo: "ID", capacidadGW: 42.0, porcentajeMundial: 2.0, descripcion: "Mayor exportador de carbón térmico del mundo. Alta dependencia doméstica.", dato_clave: "Indonesia exporta ~70% de su producción de carbón.", plantaMasGrande: { nombre: "Suralaya Power Station", capacidadMW: 4025, ubicacion: "Banten, Java", coords: [106.0, -6.0] } },
     ],
+    economia: {
+      contribucionPIB: [
+        { pais: "Indonesia", codigo: "ID", porcentaje: 3.5, descripcion: "Mayor exportador de carbón térmico, ingresos clave por regalías" },
+        { pais: "Australia", codigo: "AU", porcentaje: 2.8, descripcion: "Exportador masivo de carbón metalúrgico y térmico" },
+        { pais: "China", codigo: "CN", porcentaje: 2.0, descripcion: "Industria del carbón emplea a 4+ millones de personas" },
+        { pais: "India", codigo: "IN", porcentaje: 1.5, descripcion: "Coal India es la mayor minera de carbón del mundo" },
+        { pais: "Sudáfrica", codigo: "ZA", porcentaje: 4.0, descripcion: "Carbón genera ~85% de la electricidad y es motor de exportación" },
+      ],
+      inversionAnual: [
+        { pais: "China", codigo: "CN", monto: 40, moneda: "USD bn" },
+        { pais: "India", codigo: "IN", monto: 15, moneda: "USD bn" },
+        { pais: "Indonesia", codigo: "ID", monto: 8, moneda: "USD bn" },
+        { pais: "Australia", codigo: "AU", monto: 6, moneda: "USD bn" },
+        { pais: "Estados Unidos", codigo: "US", monto: 2, moneda: "USD bn" },
+      ],
+      mexico: { contribucionPIB: 0.08, inversionAnual: 0.3, moneda: "USD bn", nota: "Dos centrales carboeléctricas en Coahuila; sector en declive con planes de reconversión" },
+    },
     mexico: { capacidadGW: 5.4, rankingMundial: 30, fortalezas: "Dos carboeléctricas principales: Carbón II (1,400 MW) y José López Portillo (1,200 MW) en Coahuila.", retos: "Compromisos de descarbonización, altas emisiones de CO₂, carbón de baja calidad.", potencial: "En fase de retiro progresivo. Reconversión a gas natural o cierre planificado.", plantaMasGrande: { nombre: "Central Carboeléctrica Carbón II", capacidadMW: 1400, ubicacion: "Nava, Coahuila", coords: [-100.8, 28.5] } },
   },
   petroleo: {
@@ -213,6 +319,23 @@ export const POTENCIAS_DATA: Record<string, PotenciaMundialData> = {
       { pais: "Japón", codigo: "JP", capacidadGW: 18.0, porcentajeMundial: 4.0, descripcion: "Plantas de fuel oil de respaldo. Reducción progresiva post-crisis petrolera.", dato_clave: "Japón redujo su uso de petróleo para electricidad en un 80% desde los 70s.", plantaMasGrande: { nombre: "Kashima Oil-Fired Power Station", capacidadMW: 4400, ubicacion: "Ibaraki", coords: [140.7, 36.0] } },
       { pais: "Cuba", codigo: "CU", capacidadGW: 5.5, porcentajeMundial: 1.2, descripcion: "Alta dependencia del fuel oil pesado importado de Venezuela y producido localmente.", dato_clave: "Más del 90% de la electricidad cubana proviene de combustibles fósiles.", plantaMasGrande: { nombre: "CTE Antonio Guiteras", capacidadMW: 317, ubicacion: "Matanzas", coords: [-81.6, 23.0] } },
     ],
+    economia: {
+      contribucionPIB: [
+        { pais: "Arabia Saudita", codigo: "SA", porcentaje: 42.0, descripcion: "El petróleo es la base de la economía saudí, aunque Vision 2030 busca diversificar" },
+        { pais: "Irak", codigo: "IQ", porcentaje: 55.0, descripcion: "Economía casi totalmente dependiente de exportaciones de crudo" },
+        { pais: "Kuwait", codigo: "KW", porcentaje: 50.0, descripcion: "Ingresos petroleros financian el estado de bienestar" },
+        { pais: "Venezuela", codigo: "VE", porcentaje: 25.0, descripcion: "Mayores reservas del mundo pero producción en caída por crisis" },
+        { pais: "Nigeria", codigo: "NG", porcentaje: 9.0, descripcion: "Petróleo representa ~90% de exportaciones" },
+      ],
+      inversionAnual: [
+        { pais: "Arabia Saudita", codigo: "SA", monto: 35, moneda: "USD bn" },
+        { pais: "Irak", codigo: "IQ", monto: 12, moneda: "USD bn" },
+        { pais: "Irán", codigo: "IR", monto: 8, moneda: "USD bn" },
+        { pais: "EAU", codigo: "AE", monto: 20, moneda: "USD bn" },
+        { pais: "Brasil", codigo: "BR", monto: 15, moneda: "USD bn" },
+      ],
+      mexico: { contribucionPIB: 3.5, inversionAnual: 12, moneda: "USD bn", nota: "PEMEX contribuye significativamente a ingresos fiscales, pero producción en declive desde 2004" },
+    },
     mexico: { capacidadGW: 12.6, rankingMundial: 10, fortalezas: "PEMEX produce fuel oil y diésel doméstico. Plantas de respaldo en el sistema interconectado.", retos: "Alta contaminación, costos elevados de operación, envejecimiento de plantas.", potencial: "Retiro progresivo de plantas de fuel oil, sustitución por gas natural y renovables.", plantaMasGrande: { nombre: "Central Termoeléctrica Tula", capacidadMW: 1500, ubicacion: "Tula de Allende, Hidalgo", coords: [-99.4, 20.1] } },
   },
   gas_natural: {
@@ -239,6 +362,23 @@ export const POTENCIAS_DATA: Record<string, PotenciaMundialData> = {
       { pais: "China", codigo: "CN", capacidadGW: 230, porcentajeMundial: 5.6, descripcion: "Producción creciente pero insuficiente. Mayor importador de GNL del mundo.", dato_clave: "China importa ~45% de su consumo de gas natural.", plantaMasGrande: { nombre: "Sulige Gas Field", capacidadMW: 0, ubicacion: "Ordos, Mongolia Interior", coords: [109.0, 39.0] } },
       { pais: "Qatar", codigo: "QA", capacidadGW: 177, porcentajeMundial: 4.3, descripcion: "Mayor exportador de GNL del mundo. North Field es la mitad del mega-campo compartido con Irán.", dato_clave: "Qatar produce ~30% del GNL mundial.", plantaMasGrande: { nombre: "Ras Laffan LNG Complex", capacidadMW: 0, ubicacion: "Ras Laffan Industrial City", coords: [51.5, 25.9] } },
     ],
+    economia: {
+      contribucionPIB: [
+        { pais: "Qatar", codigo: "QA", porcentaje: 25.0, descripcion: "GNL es la principal fuente de ingresos del país" },
+        { pais: "Rusia", codigo: "RU", porcentaje: 12.0, descripcion: "Gazprom pilar de la economía, exportaciones a Europa y Asia" },
+        { pais: "Irán", codigo: "IR", porcentaje: 8.0, descripcion: "Gas subsidiado impulsa petroquímica doméstica" },
+        { pais: "Turkmenistán", codigo: "TM", porcentaje: 20.0, descripcion: "Gas natural representa la mayoría de exportaciones" },
+        { pais: "Estados Unidos", codigo: "US", porcentaje: 2.5, descripcion: "Shale gas revolucionó la manufactura y exportaciones de GNL" },
+      ],
+      inversionAnual: [
+        { pais: "Estados Unidos", codigo: "US", monto: 50, moneda: "USD bn" },
+        { pais: "Qatar", codigo: "QA", monto: 30, moneda: "USD bn" },
+        { pais: "Rusia", codigo: "RU", monto: 22, moneda: "USD bn" },
+        { pais: "China", codigo: "CN", monto: 18, moneda: "USD bn" },
+        { pais: "Australia", codigo: "AU", monto: 12, moneda: "USD bn" },
+      ],
+      mexico: { contribucionPIB: 0.8, inversionAnual: 2.0, moneda: "USD bn", nota: "Producción en declive, importa ~70% del gas; inversión enfocada en gasoductos transfronterizos" },
+    },
     mexico: { capacidadGW: 27, rankingMundial: 28, fortalezas: "Red de gasoductos transfronterizos desde Texas. Producción en Burgos, Veracruz y Tabasco.", retos: "Producción en declive, importa ~70% del gas que consume. Dependencia geopolítica.", potencial: "Exploración de shale gas en Burgos y aguas profundas del Golfo.", plantaMasGrande: { nombre: "Campo Burgos (producción de gas)", capacidadMW: 0, ubicacion: "Reynosa, Tamaulipas", coords: [-98.3, 26.1] } },
   },
   hidrogeno_verde: {
@@ -266,6 +406,23 @@ export const POTENCIAS_DATA: Record<string, PotenciaMundialData> = {
       { pais: "Alemania", codigo: "DE", capacidadGW: 0.15, porcentajeMundial: 10.7, descripcion: "Estrategia Nacional de Hidrógeno con €9 mil millones de inversión. Infraestructura de importación de H₂.", dato_clave: "Alemania planea importar el 70% de su H₂ desde países con recursos renovables.", plantaMasGrande: { nombre: "AquaVentus (planeado, eólico offshore)", capacidadMW: 10000, ubicacion: "Mar del Norte, Heligoland", coords: [7.9, 54.2] } },
       { pais: "India", codigo: "IN", capacidadGW: 0.12, porcentajeMundial: 8.6, descripcion: "National Green Hydrogen Mission con meta de 5 Mt/año para 2030.", dato_clave: "India quiere ser exportador neto de H₂ verde.", plantaMasGrande: { nombre: "Avaada Green Hydrogen Plant", capacidadMW: 1000, ubicacion: "Rajasthan", coords: [72.0, 26.5] } },
     ],
+    economia: {
+      contribucionPIB: [
+        { pais: "Australia", codigo: "AU", porcentaje: 0.05, descripcion: "Sector emergente con inversión masiva en proyectos piloto para exportación a Asia" },
+        { pais: "Chile", codigo: "CL", porcentaje: 0.03, descripcion: "Estrategia Nacional busca producir H₂ verde más barato del mundo" },
+        { pais: "Arabia Saudita", codigo: "SA", porcentaje: 0.02, descripcion: "Proyecto NEOM como diversificación post-petróleo" },
+        { pais: "Alemania", codigo: "DE", porcentaje: 0.04, descripcion: "€9 mil millones en inversión pública para infraestructura de H₂" },
+        { pais: "India", codigo: "IN", porcentaje: 0.01, descripcion: "National Green Hydrogen Mission con ambición exportadora" },
+      ],
+      inversionAnual: [
+        { pais: "Alemania", codigo: "DE", monto: 3.5, moneda: "USD bn" },
+        { pais: "Australia", codigo: "AU", monto: 2.8, moneda: "USD bn" },
+        { pais: "Arabia Saudita", codigo: "SA", monto: 2.5, moneda: "USD bn" },
+        { pais: "Chile", codigo: "CL", monto: 1.5, moneda: "USD bn" },
+        { pais: "India", codigo: "IN", monto: 1.0, moneda: "USD bn" },
+      ],
+      mexico: { contribucionPIB: 0.0, inversionAnual: 0.05, moneda: "USD bn", nota: "Sin estrategia nacional; proyectos piloto incipientes en Sonora" },
+    },
     mexico: { capacidadGW: 0.01, rankingMundial: 40, fortalezas: "Irradiación solar excepcional en el noroeste para electrólisis. Cercanía a mercado de EE.UU.", retos: "Sin estrategia nacional de hidrógeno. Falta de infraestructura de transporte y almacenamiento.", potencial: "El Desierto de Sonora podría convertirse en hub de producción de H₂ verde para exportación.", plantaMasGrande: { nombre: "Sin plantas operativas significativas", capacidadMW: 0, ubicacion: "Proyectos piloto en Sonora", coords: [-111, 29] } },
   },
   nuclear: {
@@ -292,6 +449,23 @@ export const POTENCIAS_DATA: Record<string, PotenciaMundialData> = {
       { pais: "Rusia", codigo: "RU", capacidadGW: 29.5, porcentajeMundial: 7.1, descripcion: "Rosatom es el principal exportador de tecnología nuclear.", dato_clave: "Rosatom construye reactores en más de 10 países.", plantaMasGrande: { nombre: "Leningrad Nuclear Power Plant", capacidadMW: 4000, ubicacion: "Leningrad Oblast", coords: [29.0, 59.8] } },
       { pais: "Corea del Sur", codigo: "KR", capacidadGW: 26.0, porcentajeMundial: 6.3, descripcion: "Tecnología APR1400 de clase mundial. Exportador de reactores.", dato_clave: "La nuclear genera ~30% de la electricidad surcoreana.", plantaMasGrande: { nombre: "Hanul Nuclear Power Plant", capacidadMW: 5908, ubicacion: "Gyeongsang del Norte", coords: [129.4, 37.1] } },
     ],
+    economia: {
+      contribucionPIB: [
+        { pais: "Francia", codigo: "FR", porcentaje: 2.0, descripcion: "EDF y la industria nuclear emplean 220,000+ personas, pilar de soberanía energética" },
+        { pais: "Estados Unidos", codigo: "US", porcentaje: 0.5, descripcion: "100,000 empleos directos, nuclear genera ~20% de la electricidad" },
+        { pais: "Corea del Sur", codigo: "KR", porcentaje: 1.2, descripcion: "Exporta tecnología APR1400, industria nuclear estratégica" },
+        { pais: "Rusia", codigo: "RU", porcentaje: 1.0, descripcion: "Rosatom exporta reactores a 10+ países, sector estatal clave" },
+        { pais: "China", codigo: "CN", porcentaje: 0.4, descripcion: "Programa nuclear en expansión masiva, 24 reactores en construcción" },
+      ],
+      inversionAnual: [
+        { pais: "China", codigo: "CN", monto: 15, moneda: "USD bn" },
+        { pais: "Francia", codigo: "FR", monto: 8, moneda: "USD bn" },
+        { pais: "Estados Unidos", codigo: "US", monto: 6, moneda: "USD bn" },
+        { pais: "Corea del Sur", codigo: "KR", monto: 5, moneda: "USD bn" },
+        { pais: "Rusia", codigo: "RU", monto: 7, moneda: "USD bn" },
+      ],
+      mexico: { contribucionPIB: 0.05, inversionAnual: 0.2, moneda: "USD bn", nota: "Laguna Verde opera con 2 reactores BWR; sin planes de expansión nuclear" },
+    },
     mexico: { capacidadGW: 1.6, rankingMundial: 30, fortalezas: "Central Laguna Verde (2 reactores BWR) operando desde 1990.", retos: "No hay planes de nuevos reactores, percepción pública negativa.", potencial: "Extensión de vida útil de Laguna Verde y posible exploración de SMRs.", plantaMasGrande: { nombre: "Central Nucleoeléctrica Laguna Verde", capacidadMW: 1634, ubicacion: "Alto Lucero, Veracruz", coords: [-96.4, 19.7] } },
   },
   geotermica: {
@@ -319,6 +493,23 @@ export const POTENCIAS_DATA: Record<string, PotenciaMundialData> = {
       { pais: "Turquía", codigo: "TR", capacidadGW: 1.69, porcentajeMundial: 10.4, descripcion: "Crecimiento explosivo en Anatolia occidental.", dato_clave: "Pasó de 0.1 GW a 1.7 GW en solo 10 años.", plantaMasGrande: { nombre: "Kızıldere III Geothermal Power Plant", capacidadMW: 165, ubicacion: "Denizli", coords: [29.0, 37.8] } },
       { pais: "Nueva Zelanda", codigo: "NZ", capacidadGW: 1.04, porcentajeMundial: 6.4, descripcion: "Zona volcánica de Taupo como recurso principal.", dato_clave: "La geotérmica provee ~17% de la electricidad neozelandesa.", plantaMasGrande: { nombre: "Nga Awa Purua", capacidadMW: 140, ubicacion: "Taupo, North Island", coords: [176.2, -38.5] } },
     ],
+    economia: {
+      contribucionPIB: [
+        { pais: "Islandia", codigo: "IS", porcentaje: 4.0, descripcion: "Geotérmica calienta 90% de hogares y atrae industria de aluminio" },
+        { pais: "Kenia", codigo: "KE", porcentaje: 1.5, descripcion: "Geotérmica genera ~45% de la electricidad, motor de desarrollo" },
+        { pais: "Filipinas", codigo: "PH", porcentaje: 0.8, descripcion: "12% de electricidad es geotérmica, reduce importación de combustibles" },
+        { pais: "Indonesia", codigo: "ID", porcentaje: 0.3, descripcion: "Potencial geotérmico más grande del mundo, en fase de explotación" },
+        { pais: "Nueva Zelanda", codigo: "NZ", porcentaje: 1.0, descripcion: "17% de electricidad y calefacción urbana en Rotorua" },
+      ],
+      inversionAnual: [
+        { pais: "Indonesia", codigo: "ID", monto: 1.5, moneda: "USD bn" },
+        { pais: "Estados Unidos", codigo: "US", monto: 1.2, moneda: "USD bn" },
+        { pais: "Turquía", codigo: "TR", monto: 0.8, moneda: "USD bn" },
+        { pais: "Kenia", codigo: "KE", monto: 0.6, moneda: "USD bn" },
+        { pais: "Filipinas", codigo: "PH", monto: 0.4, moneda: "USD bn" },
+      ],
+      mexico: { contribucionPIB: 0.05, inversionAnual: 0.15, moneda: "USD bn", nota: "Cerro Prieto y Los Azufres operativos; poca inversión en exploración de nuevos campos" },
+    },
     mexico: { capacidadGW: 0.96, rankingMundial: 6, fortalezas: "Cerro Prieto es uno de los mayores campos geotérmicos del mundo.", retos: "Inversión insuficiente en exploración, tecnología costosa.", potencial: "Potencial de 10+ GW en el Eje Neovolcánico Transversal.", plantaMasGrande: { nombre: "Campo Geotérmico Cerro Prieto", capacidadMW: 570, ubicacion: "Mexicali, Baja California", coords: [-115.2, 32.4] } },
   },
   bioenergia: {
@@ -345,6 +536,23 @@ export const POTENCIAS_DATA: Record<string, PotenciaMundialData> = {
       { pais: "India", codigo: "IN", capacidadGW: 11.3, porcentajeMundial: 7.1, descripcion: "Cogeneración con bagazo en la industria azucarera.", dato_clave: "Potencial de biomasa estimado en 25 GW.", plantaMasGrande: { nombre: "JSW Ratnagiri Biomass Plant", capacidadMW: 130, ubicacion: "Maharashtra", coords: [73.3, 17.0] } },
       { pais: "Alemania", codigo: "DE", capacidadGW: 9.5, porcentajeMundial: 5.9, descripcion: "Líder europeo en biogás. +9,000 plantas de biogás.", dato_clave: "El biogás genera ~5% de la electricidad alemana.", plantaMasGrande: { nombre: "Zerbst Biomass Power Plant", capacidadMW: 20, ubicacion: "Sajonia-Anhalt", coords: [12.1, 51.9] } },
     ],
+    economia: {
+      contribucionPIB: [
+        { pais: "Brasil", codigo: "BR", porcentaje: 1.5, descripcion: "Etanol de caña y cogeneración son pilar agroindustrial" },
+        { pais: "Suecia", codigo: "SE", porcentaje: 1.2, descripcion: "Biomasa forestal cubre 25% de energía primaria" },
+        { pais: "Finlandia", codigo: "FI", porcentaje: 1.0, descripcion: "Industria forestal integrada con bioenergía" },
+        { pais: "Alemania", codigo: "DE", porcentaje: 0.5, descripcion: "9,000+ plantas de biogás en zonas rurales, empleo agrícola" },
+        { pais: "India", codigo: "IN", porcentaje: 0.3, descripcion: "Cogeneración con bagazo en industria azucarera" },
+      ],
+      inversionAnual: [
+        { pais: "Brasil", codigo: "BR", monto: 5, moneda: "USD bn" },
+        { pais: "China", codigo: "CN", monto: 4, moneda: "USD bn" },
+        { pais: "Estados Unidos", codigo: "US", monto: 3, moneda: "USD bn" },
+        { pais: "Alemania", codigo: "DE", monto: 2.5, moneda: "USD bn" },
+        { pais: "India", codigo: "IN", monto: 1.5, moneda: "USD bn" },
+      ],
+      mexico: { contribucionPIB: 0.02, inversionAnual: 0.08, moneda: "USD bn", nota: "Potencial en cogeneración azucarera y residuos agrícolas; falta de incentivos" },
+    },
     mexico: { capacidadGW: 0.8, rankingMundial: 35, fortalezas: "Industria azucarera con potencial de cogeneración, residuos agrícolas abundantes.", retos: "Falta de incentivos, logística y competencia con otros usos del suelo.", potencial: "Potencial estimado de 8 GW con residuos agrícolas, forestales e industria azucarera.", plantaMasGrande: { nombre: "Bioenergía de Nuevo León", capacidadMW: 12, ubicacion: "Monterrey, Nuevo León", coords: [-100.3, 25.7] } },
   },
   otras: {

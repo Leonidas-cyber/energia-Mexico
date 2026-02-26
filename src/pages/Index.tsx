@@ -10,6 +10,7 @@ import { TabPlantasEstado } from "@/components/tabs/TabPlantasEstado";
 import { TabDuenos } from "@/components/tabs/TabDuenos";
 import { TabPotenciasMundiales } from "@/components/tabs/TabPotenciasMundiales";
 import { TabGasoductos } from "@/components/tabs/TabGasoductos";
+import { TabAcercaDe } from "@/components/tabs/TabAcercaDe";
 import { useSearchParams } from "react-router-dom";
 
 const TAB_MAP: Record<string, string> = {
@@ -27,17 +28,20 @@ const Index = () => {
       <KPIBar />
       <FilterPanel />
 
-      <main className="flex-1 container mx-auto px-4 py-4">
+      <main className="flex-1 container mx-auto px-2 sm:px-4 py-4">
         <Tabs defaultValue={defaultTab} className="w-full">
-          <TabsList className="w-full flex flex-wrap h-auto gap-1">
-            <TabsTrigger value="sen" className="text-xs">SEN: Transmisión</TabsTrigger>
-            <TabsTrigger value="plantas" className="text-xs">Plantas por Energía</TabsTrigger>
-            <TabsTrigger value="potencia-estado" className="text-xs">Potencia por Estado</TabsTrigger>
-            <TabsTrigger value="plantas-estado" className="text-xs">Plantas por Estado</TabsTrigger>
-            <TabsTrigger value="duenos" className="text-xs">Propiedad y Dueños</TabsTrigger>
-            <TabsTrigger value="gasoductos" className="text-xs">Gasoductos</TabsTrigger>
-            <TabsTrigger value="potencias-mundiales" className="text-xs">Potencias Mundiales</TabsTrigger>
-          </TabsList>
+          <div className="overflow-x-auto -mx-2 px-2 pb-2 scrollbar-hide">
+            <TabsList className="inline-flex w-max h-auto gap-1 p-1">
+              <TabsTrigger value="sen" className="text-xs px-2.5 py-2 min-w-max">SEN: Transmisión</TabsTrigger>
+              <TabsTrigger value="plantas" className="text-xs px-2.5 py-2 min-w-max">Plantas por Energía</TabsTrigger>
+              <TabsTrigger value="potencia-estado" className="text-xs px-2.5 py-2 min-w-max">Potencia por Estado</TabsTrigger>
+              <TabsTrigger value="plantas-estado" className="text-xs px-2.5 py-2 min-w-max">Plantas por Estado</TabsTrigger>
+              <TabsTrigger value="duenos" className="text-xs px-2.5 py-2 min-w-max">Propiedad y Dueños</TabsTrigger>
+              <TabsTrigger value="gasoductos" className="text-xs px-2.5 py-2 min-w-max">Gasoductos</TabsTrigger>
+              <TabsTrigger value="potencias-mundiales" className="text-xs px-2.5 py-2 min-w-max">Potencias Mundiales</TabsTrigger>
+              <TabsTrigger value="acerca-de" className="text-xs px-2.5 py-2 min-w-max">Acerca de</TabsTrigger>
+            </TabsList>
+          </div>
 
           <TabsContent value="sen"><TabSEN /></TabsContent>
           <TabsContent value="plantas"><TabPlantas /></TabsContent>
@@ -46,6 +50,7 @@ const Index = () => {
           <TabsContent value="duenos"><TabDuenos /></TabsContent>
           <TabsContent value="gasoductos"><TabGasoductos /></TabsContent>
           <TabsContent value="potencias-mundiales"><TabPotenciasMundiales /></TabsContent>
+          <TabsContent value="acerca-de"><TabAcercaDe /></TabsContent>
         </Tabs>
       </main>
 

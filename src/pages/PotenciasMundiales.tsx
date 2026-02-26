@@ -4,16 +4,19 @@ import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Trophy, Globe, TrendingUp, AlertTriangle, Lightbulb, MapPin, Building2, Zap, Database } from "lucide-react";
+import { ArrowLeft, Trophy, Globe, TrendingUp, AlertTriangle, Lightbulb, MapPin, Building2, Zap, Database, DollarSign, BarChart3, Building, ShieldCheck, Clock, CloudRain } from "lucide-react";
 import { useEnergy } from "@/contexts/EnergyContext";
 import { SolarWindLeafletMap } from "@/components/map/SolarWindLeafletMap";
 import { MexicoMap } from "@/components/map/MexicoMap";
 import { POTENCIAS_DATA, COUNTRY_COORDS } from "@/data/potenciasMundiales";
+import { TENDENCIAS } from "@/data/tendenciasHistoricas";
+import { EMISIONES_DATA } from "@/data/emisionesEnergia";
 import type { PaisPotencia, PlantaGrande, MexicoComparacion } from "@/data/potenciasMundiales";
 import { useMemo, useRef, useEffect } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import type { EnergiaCategoria } from "@/types/energy";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from "recharts";
 
 const ENERGY_COLORS: Record<string, string> = {
   solar: "#f59e0b", eolica: "#0ea5e9", hidroelectrica: "#3b82f6",
@@ -150,7 +153,7 @@ function WorldPowersMap({ top5, mexico, color, tipo, recursoLegend }: {
 
   return (
     <div className="relative">
-      <div ref={mapContainer} className="w-full rounded-md border" style={{ height: "420px" }} />
+      <div ref={mapContainer} className="w-full rounded-md border h-[280px] sm:h-[420px]" />
       {/* Legend */}
       <div className="absolute bottom-3 left-3 bg-card/90 backdrop-blur-sm rounded-md border px-3 py-2 text-[10px] shadow space-y-1 z-[1000]">
         <div className="flex items-center gap-1.5">
@@ -238,19 +241,19 @@ const PotenciasMundiales = () => {
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <Header />
-      <main className="flex-1 container mx-auto px-4 py-6 space-y-6">
-        <Button variant="ghost" size="sm" onClick={() => navigate("/?tab=potencias")} className="gap-1">
+      <main className="flex-1 container mx-auto px-2 sm:px-4 py-4 sm:py-6 space-y-4 sm:space-y-6">
+        <Button variant="ghost" size="sm" onClick={() => navigate("/?tab=potencias")} className="gap-1 -ml-1">
           <ArrowLeft className="h-4 w-4" /> Volver al tablero
         </Button>
 
         {/* Title */}
         <div>
-          <h1 className="text-2xl font-bold flex items-center gap-2">
-            <Globe className="h-6 w-6" style={{ color }} />
+          <h1 className="text-xl sm:text-2xl font-bold flex items-center gap-2">
+            <Globe className="h-5 w-5 sm:h-6 sm:w-6 shrink-0" style={{ color }} />
             {data.titulo}
           </h1>
-          <p className="text-sm text-muted-foreground mt-1">{data.subtitulo}</p>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs sm:text-sm text-muted-foreground mt-1">{data.subtitulo}</p>
+          <p className="text-[10px] sm:text-xs text-muted-foreground">
             Capacidad mundial total: <strong>{data.totalMundialGW.toLocaleString()} {data.unidad}</strong>
           </p>
         </div>
@@ -343,7 +346,147 @@ const PotenciasMundiales = () => {
           )}
         </section>
 
-        {/* Reserves Section */}
+        {/* Public vs Private Sector in Mexico */}
+        {plantasFiltradas.length > 0 && (() => {
+          const publicas = plantasFiltradas.filter(p => p.sector === "publica");
+          const privadas = plantasFiltradas.filter(p => p.sector === "privada");
+          const nd = plantasFiltradas.filter(p => p.sector === "nd");
+          const totalMW = plantasFiltradas.reduce((s, p) => s + (p.potencia_mw || 0), 0);
+          const mwPublica = publicas.reduce((s, p) => s + (p.potencia_mw || 0), 0);
+          const mwPrivada = privadas.reduce((s, p) => s + (p.potencia_mw || 0), 0);
+          const mwNd = nd.reduce((s, p) => s + (p.potencia_mw || 0), 0);
+          const pctPubMW = totalMW > 0 ? ((mwPublica / totalMW) * 100).toFixed(1) : "0";
+          const pctPrivMW = totalMW > 0 ? ((mwPrivada / totalMW) * 100).toFixed(1) : "0";
+          const pctNdMW = totalMW > 0 ? ((mwNd / totalMW) * 100).toFixed(1) : "0";
+          const totalCount = plantasFiltradas.length;
+          const pctPubCount = ((publicas.length / totalCount) * 100).toFixed(1);
+          const pctPrivCount = ((privadas.length / totalCount) * 100).toFixed(1);
+
+          return (
+            <section className="space-y-3">
+              <h2 className="text-lg font-semibold flex items-center gap-2">
+                <Building className="h-5 w-5" style={{ color }} />
+                Sector Público vs Privado en México
+              </h2>
+              <p className="text-xs text-muted-foreground">
+                Distribución de las {totalCount} plantas de {data.titulo.toLowerCase()} en México por tipo de propiedad
+              </p>
+              <div className="grid sm:grid-cols-2 gap-4">
+                {/* By MW */}
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm">Por Potencia Instalada (MW)</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-xs">
+                        <span className="flex items-center gap-1"><ShieldCheck className="h-3 w-3 text-blue-600" /> Sector Público</span>
+                        <span className="font-mono font-semibold">{mwPublica.toLocaleString()} MW ({pctPubMW}%)</span>
+                      </div>
+                      <div className="h-4 rounded-full bg-muted overflow-hidden">
+                        <div className="h-full rounded-full bg-blue-500" style={{ width: `${pctPubMW}%` }} />
+                      </div>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-xs">
+                        <span className="flex items-center gap-1"><Building2 className="h-3 w-3 text-amber-600" /> Sector Privado</span>
+                        <span className="font-mono font-semibold">{mwPrivada.toLocaleString()} MW ({pctPrivMW}%)</span>
+                      </div>
+                      <div className="h-4 rounded-full bg-muted overflow-hidden">
+                        <div className="h-full rounded-full bg-amber-500" style={{ width: `${pctPrivMW}%` }} />
+                      </div>
+                    </div>
+                    {mwNd > 0 && (
+                      <div className="space-y-1">
+                        <div className="flex justify-between text-xs">
+                          <span className="text-muted-foreground">No determinado</span>
+                          <span className="font-mono text-muted-foreground">{mwNd.toLocaleString()} MW ({pctNdMW}%)</span>
+                        </div>
+                        <div className="h-4 rounded-full bg-muted overflow-hidden">
+                          <div className="h-full rounded-full bg-muted-foreground/30" style={{ width: `${pctNdMW}%` }} />
+                        </div>
+                      </div>
+                    )}
+                    {/* Stacked bar */}
+                    <div className="pt-2 border-t">
+                      <p className="text-[10px] text-muted-foreground mb-1">Distribución total</p>
+                      <div className="h-6 rounded-full overflow-hidden flex">
+                        <div className="h-full bg-blue-500 flex items-center justify-center" style={{ width: `${pctPubMW}%` }}>
+                          {parseFloat(pctPubMW) > 10 && <span className="text-[9px] text-white font-semibold">{pctPubMW}%</span>}
+                        </div>
+                        <div className="h-full bg-amber-500 flex items-center justify-center" style={{ width: `${pctPrivMW}%` }}>
+                          {parseFloat(pctPrivMW) > 10 && <span className="text-[9px] text-white font-semibold">{pctPrivMW}%</span>}
+                        </div>
+                        {mwNd > 0 && (
+                          <div className="h-full bg-muted-foreground/30 flex items-center justify-center" style={{ width: `${pctNdMW}%` }}>
+                            {parseFloat(pctNdMW) > 10 && <span className="text-[9px] font-semibold">{pctNdMW}%</span>}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* By Count */}
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm">Por Número de Plantas</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-xs">
+                        <span className="flex items-center gap-1"><ShieldCheck className="h-3 w-3 text-blue-600" /> Sector Público</span>
+                        <span className="font-mono font-semibold">{publicas.length} plantas ({pctPubCount}%)</span>
+                      </div>
+                      <div className="h-4 rounded-full bg-muted overflow-hidden">
+                        <div className="h-full rounded-full bg-blue-500" style={{ width: `${pctPubCount}%` }} />
+                      </div>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-xs">
+                        <span className="flex items-center gap-1"><Building2 className="h-3 w-3 text-amber-600" /> Sector Privado</span>
+                        <span className="font-mono font-semibold">{privadas.length} plantas ({pctPrivCount}%)</span>
+                      </div>
+                      <div className="h-4 rounded-full bg-muted overflow-hidden">
+                        <div className="h-full rounded-full bg-amber-500" style={{ width: `${pctPrivCount}%` }} />
+                      </div>
+                    </div>
+                    {nd.length > 0 && (
+                      <div className="space-y-1">
+                        <div className="flex justify-between text-xs">
+                          <span className="text-muted-foreground">No determinado</span>
+                          <span className="font-mono text-muted-foreground">{nd.length} plantas ({((nd.length / totalCount) * 100).toFixed(1)}%)</span>
+                        </div>
+                        <div className="h-4 rounded-full bg-muted overflow-hidden">
+                          <div className="h-full rounded-full bg-muted-foreground/30" style={{ width: `${((nd.length / totalCount) * 100).toFixed(1)}%` }} />
+                        </div>
+                      </div>
+                    )}
+                    {/* Stacked bar */}
+                    <div className="pt-2 border-t">
+                      <p className="text-[10px] text-muted-foreground mb-1">Distribución total</p>
+                      <div className="h-6 rounded-full overflow-hidden flex">
+                        <div className="h-full bg-blue-500 flex items-center justify-center" style={{ width: `${pctPubCount}%` }}>
+                          {parseFloat(pctPubCount) > 10 && <span className="text-[9px] text-white font-semibold">{pctPubCount}%</span>}
+                        </div>
+                        <div className="h-full bg-amber-500 flex items-center justify-center" style={{ width: `${pctPrivCount}%` }}>
+                          {parseFloat(pctPrivCount) > 10 && <span className="text-[9px] text-white font-semibold">{pctPrivCount}%</span>}
+                        </div>
+                        {nd.length > 0 && (
+                          <div className="h-full bg-muted-foreground/30 flex items-center justify-center" style={{ width: `${((nd.length / totalCount) * 100).toFixed(1)}%` }}>
+                            {(nd.length / totalCount) * 100 > 10 && <span className="text-[9px] font-semibold">{((nd.length / totalCount) * 100).toFixed(1)}%</span>}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </section>
+          );
+        })()}
+
+
         {data.reservas && (
           <section className="space-y-3">
             <h2 className="text-lg font-semibold flex items-center gap-2">
@@ -390,7 +533,398 @@ const PotenciasMundiales = () => {
           </section>
         )}
 
-        {/* Mexico Comparison */}
+        {/* Economic Impact Section */}
+        {data.economia && (
+          <section className="space-y-3">
+            <h2 className="text-lg font-semibold flex items-center gap-2">
+              <DollarSign className="h-5 w-5" style={{ color }} />
+              Impacto Económico — PIB e Inversión
+            </h2>
+            <div className="grid sm:grid-cols-2 gap-4">
+              {/* GDP Contribution */}
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm flex items-center gap-2">
+                    <BarChart3 className="h-4 w-4" style={{ color }} />
+                    Contribución al PIB (%)
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  {data.economia.contribucionPIB.map((item, i) => {
+                    const maxPct = data.economia!.contribucionPIB[0].porcentaje;
+                    const barPct = Math.min((item.porcentaje / maxPct) * 100, 100);
+                    return (
+                      <div key={item.codigo + i} className="space-y-0.5">
+                        <div className="flex justify-between text-xs">
+                          <span className="font-medium">{item.pais}</span>
+                          <span className="font-mono font-semibold">{item.porcentaje}%</span>
+                        </div>
+                        <div className="h-3 rounded-full bg-muted overflow-hidden">
+                          <div className="h-full rounded-full opacity-80" style={{ width: `${Math.max(barPct, 2)}%`, background: color }} />
+                        </div>
+                        <p className="text-[10px] text-muted-foreground">{item.descripcion}</p>
+                      </div>
+                    );
+                  })}
+                  {/* Mexico */}
+                  <div className="space-y-0.5 pt-1 border-t">
+                    <div className="flex justify-between text-xs">
+                      <span className="font-semibold">🇲🇽 México</span>
+                      <span className="font-mono font-semibold">{data.economia.mexico.contribucionPIB}%</span>
+                    </div>
+                    <div className="h-3 rounded-full bg-muted overflow-hidden">
+                      <div className="h-full rounded-full bg-green-500" style={{
+                        width: `${Math.max((data.economia.mexico.contribucionPIB / data.economia.contribucionPIB[0].porcentaje) * 100, 1)}%`
+                      }} />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Annual Investment */}
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm flex items-center gap-2">
+                    <DollarSign className="h-4 w-4" style={{ color }} />
+                    Inversión Anual (USD miles de millones)
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  {data.economia.inversionAnual.map((item, i) => {
+                    const maxInv = data.economia!.inversionAnual[0].monto;
+                    const barPct = Math.min((item.monto / maxInv) * 100, 100);
+                    return (
+                      <div key={item.codigo + i} className="space-y-0.5">
+                        <div className="flex justify-between text-xs">
+                          <span className="font-medium">{item.pais}</span>
+                          <span className="font-mono font-semibold">${item.monto} bn</span>
+                        </div>
+                        <div className="h-3 rounded-full bg-muted overflow-hidden">
+                          <div className="h-full rounded-full opacity-80" style={{ width: `${Math.max(barPct, 2)}%`, background: color }} />
+                        </div>
+                      </div>
+                    );
+                  })}
+                  {/* Mexico */}
+                  <div className="space-y-0.5 pt-1 border-t">
+                    <div className="flex justify-between text-xs">
+                      <span className="font-semibold">🇲🇽 México</span>
+                      <span className="font-mono font-semibold">${data.economia.mexico.inversionAnual} bn</span>
+                    </div>
+                    <div className="h-3 rounded-full bg-muted overflow-hidden">
+                      <div className="h-full rounded-full bg-green-500" style={{
+                        width: `${Math.max((data.economia.mexico.inversionAnual / data.economia.inversionAnual[0].monto) * 100, 1)}%`
+                      }} />
+                    </div>
+                    <p className="text-[10px] text-muted-foreground mt-1">{data.economia.mexico.nota}</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </section>
+        )}
+
+        {/* Historical Trends Chart */}
+        {(() => {
+          const tendencia = TENDENCIAS[tipo || ""];
+          if (!tendencia) return null;
+          return (
+            <section className="space-y-3">
+              <h2 className="text-lg font-semibold flex items-center gap-2">
+                <Clock className="h-5 w-5" style={{ color }} />
+                {tendencia.titulo}
+              </h2>
+              <p className="text-xs text-muted-foreground">
+                Evolución de la capacidad instalada de los principales países y México. Datos en {data.unidad}.
+              </p>
+              <Card>
+                <CardContent className="pt-6">
+                  <ResponsiveContainer width="100%" height={380}>
+                    <LineChart data={tendencia.datos} margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                      <XAxis
+                        dataKey="año"
+                        tick={{ fontSize: 11 }}
+                        stroke="hsl(var(--muted-foreground))"
+                      />
+                      <YAxis
+                        tick={{ fontSize: 11 }}
+                        stroke="hsl(var(--muted-foreground))"
+                        label={{ value: data.unidad, angle: -90, position: "insideLeft", style: { fontSize: 11 } }}
+                      />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "hsl(var(--card))",
+                          border: "1px solid hsl(var(--border))",
+                          borderRadius: "6px",
+                          fontSize: "12px",
+                        }}
+                        formatter={(value: number, name: string) => {
+                          const pais = tendencia.paises.find(p => p.codigo === name);
+                          return [value.toLocaleString() + " " + data.unidad, pais?.nombre || name];
+                        }}
+                        labelFormatter={(label) => `Año ${label}`}
+                      />
+                      <Legend
+                        formatter={(value: string) => {
+                          const pais = tendencia.paises.find(p => p.codigo === value);
+                          return pais?.nombre || value;
+                        }}
+                        wrapperStyle={{ fontSize: "11px" }}
+                      />
+                      {tendencia.paises.map((pais) => (
+                        <Line
+                          key={pais.codigo}
+                          type="monotone"
+                          dataKey={pais.codigo}
+                          stroke={pais.color}
+                          strokeWidth={pais.codigo === "MX" ? 3 : 1.5}
+                          dot={pais.codigo === "MX" ? { r: 4, fill: pais.color } : { r: 2 }}
+                          activeDot={{ r: 6 }}
+                          strokeDasharray={pais.codigo === "MX" ? undefined : undefined}
+                        />
+                      ))}
+                    </LineChart>
+                  </ResponsiveContainer>
+                  <p className="text-[10px] text-muted-foreground text-center mt-2">
+                    🇲🇽 La línea de México aparece resaltada para facilitar la comparación. Fuentes: IRENA, IEA, EIA, BP Statistical Review.
+                  </p>
+                </CardContent>
+              </Card>
+            </section>
+          );
+        })()}
+
+        {/* CO₂ Emissions Section */}
+        {(() => {
+          const emisiones = EMISIONES_DATA[tipo || ""];
+          if (!emisiones) return null;
+          const maxEmision = emisiones.top5[0].emisionesMt;
+          return (
+            <section className="space-y-3">
+              <h2 className="text-lg font-semibold flex items-center gap-2">
+                <CloudRain className="h-5 w-5" style={{ color }} />
+                {emisiones.titulo}
+              </h2>
+              <p className="text-xs text-muted-foreground">{emisiones.descripcionImpacto}</p>
+              <div className="grid sm:grid-cols-2 gap-4">
+                {/* Emissions by country */}
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm flex items-center gap-2">
+                      <CloudRain className="h-4 w-4" style={{ color }} />
+                      Emisiones por País (Mt CO₂/año)
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    {emisiones.top5.map((item, i) => {
+                      const barPct = Math.min((item.emisionesMt / maxEmision) * 100, 100);
+                      return (
+                        <div key={item.codigo + i} className="space-y-0.5">
+                          <div className="flex justify-between text-xs">
+                            <span className="font-medium">{item.pais}</span>
+                            <span className="font-mono font-semibold">{item.emisionesMt.toLocaleString()} Mt</span>
+                          </div>
+                          <div className="h-3 rounded-full bg-muted overflow-hidden">
+                            <div className="h-full rounded-full bg-destructive/70" style={{ width: `${Math.max(barPct, 2)}%` }} />
+                          </div>
+                          <p className="text-[10px] text-muted-foreground">{item.descripcion}</p>
+                        </div>
+                      );
+                    })}
+                    {/* Mexico */}
+                    <div className="space-y-0.5 pt-1 border-t">
+                      <div className="flex justify-between text-xs">
+                        <span className="font-semibold">🇲🇽 México</span>
+                        <span className="font-mono font-semibold">{emisiones.mexico.emisionesMt.toLocaleString()} Mt</span>
+                      </div>
+                      <div className="h-3 rounded-full bg-muted overflow-hidden">
+                        <div className="h-full rounded-full bg-green-500" style={{
+                          width: `${Math.max((emisiones.mexico.emisionesMt / maxEmision) * 100, 1)}%`
+                        }} />
+                      </div>
+                      <p className="text-[10px] text-muted-foreground">{emisiones.mexico.descripcion}</p>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Emission intensity + context */}
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm">Factor e Intensidad de Emisión</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="bg-muted/50 rounded-md p-3 space-y-2">
+                      <p className="text-xs font-medium">Factor de emisión promedio</p>
+                      <p className="text-lg font-mono font-bold" style={{ color }}>{emisiones.factorEmision}</p>
+                    </div>
+                    <div className="bg-muted/50 rounded-md p-3 space-y-1">
+                      <p className="text-xs font-medium">Emisiones mundiales del sector</p>
+                      <p className="text-lg font-mono font-bold">{emisiones.mundialMt.toLocaleString()} Mt CO₂/año</p>
+                    </div>
+                    {emisiones.top5.some(e => e.intensidad > 0) && (
+                      <div className="space-y-1.5 pt-2 border-t">
+                        <p className="text-xs font-medium text-muted-foreground">Intensidad de emisión (gCO₂/kWh)</p>
+                        {emisiones.top5.filter(e => e.intensidad > 0).map((item) => {
+                          const maxInt = Math.max(...emisiones.top5.map(e => e.intensidad));
+                          const pct = Math.min((item.intensidad / maxInt) * 100, 100);
+                          return (
+                            <div key={item.codigo + "-int"} className="space-y-0.5">
+                              <div className="flex justify-between text-[10px]">
+                                <span>{item.pais}</span>
+                                <span className="font-mono">{item.intensidad} gCO₂/kWh</span>
+                              </div>
+                              <div className="h-2 rounded-full bg-muted overflow-hidden">
+                                <div className="h-full rounded-full bg-destructive/50" style={{ width: `${Math.max(pct, 3)}%` }} />
+                              </div>
+                            </div>
+                          );
+                        })}
+                        {emisiones.mexico.intensidad > 0 && (
+                          <div className="space-y-0.5">
+                            <div className="flex justify-between text-[10px]">
+                              <span className="font-semibold">🇲🇽 México</span>
+                              <span className="font-mono font-semibold">{emisiones.mexico.intensidad} gCO₂/kWh</span>
+                            </div>
+                            <div className="h-2 rounded-full bg-muted overflow-hidden">
+                              <div className="h-full rounded-full bg-green-500" style={{
+                                width: `${Math.max((emisiones.mexico.intensidad / Math.max(...emisiones.top5.map(e => e.intensidad))) * 100, 3)}%`
+                              }} />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                    <p className="text-[10px] text-muted-foreground pt-1 border-t">
+                      Fuentes: IEA World Energy Outlook 2024, Our World in Data, BP Statistical Review.
+                    </p>
+                  </CardContent>
+                </Card>
+              </div>
+            </section>
+          );
+        })()}
+
+        {/* Radar Chart: Mexico vs Top 5 */}
+        {(() => {
+          const emisiones = EMISIONES_DATA[tipo || ""];
+          if (!data.economia || !emisiones) return null;
+
+          // Normalize each metric to 0-100 scale for radar
+          const topCapacidad = data.top5[0].capacidadGW;
+          const topInversion = data.economia.inversionAnual[0]?.monto || 1;
+          const topPIB = data.economia.contribucionPIB[0]?.porcentaje || 1;
+          const topEmision = emisiones.top5[0]?.emisionesMt || 1;
+
+          const radarMetrics = [
+            { metric: "Capacidad", fullMark: 100 },
+            { metric: "Inversión", fullMark: 100 },
+            { metric: "PIB (%)", fullMark: 100 },
+            { metric: "Emisiones", fullMark: 100 },
+          ];
+
+          // Build radar data: each entry is a metric with values per country
+          const countries = [
+            ...data.top5.slice(0, 5).map(p => ({ codigo: p.codigo, nombre: p.pais })),
+            { codigo: "MX", nombre: "México" },
+          ];
+
+          const radarData = radarMetrics.map(m => {
+            const entry: Record<string, string | number> = { metric: m.metric };
+            countries.forEach(c => {
+              let val = 0;
+              if (m.metric === "Capacidad") {
+                if (c.codigo === "MX") val = (data.mexico.capacidadGW / topCapacidad) * 100;
+                else {
+                  const p = data.top5.find(t => t.codigo === c.codigo);
+                  val = p ? (p.capacidadGW / topCapacidad) * 100 : 0;
+                }
+              } else if (m.metric === "Inversión") {
+                if (c.codigo === "MX") val = (data.economia!.mexico.inversionAnual / topInversion) * 100;
+                else {
+                  const inv = data.economia!.inversionAnual.find(t => t.codigo === c.codigo);
+                  val = inv ? (inv.monto / topInversion) * 100 : 0;
+                }
+              } else if (m.metric === "PIB (%)") {
+                if (c.codigo === "MX") val = (data.economia!.mexico.contribucionPIB / topPIB) * 100;
+                else {
+                  const pib = data.economia!.contribucionPIB.find(t => t.codigo === c.codigo);
+                  val = pib ? (pib.porcentaje / topPIB) * 100 : 0;
+                }
+              } else if (m.metric === "Emisiones") {
+                if (c.codigo === "MX") val = (emisiones.mexico.emisionesMt / topEmision) * 100;
+                else {
+                  const em = emisiones.top5.find(t => t.codigo === c.codigo);
+                  val = em ? (em.emisionesMt / topEmision) * 100 : 0;
+                }
+              }
+              entry[c.codigo] = Math.round(Math.min(val, 100) * 10) / 10;
+            });
+            return entry;
+          });
+
+          const RADAR_COLORS = ["#ef4444", "#3b82f6", "#f97316", "#8b5cf6", "#06b6d4", "#16a34a"];
+
+          return (
+            <section className="space-y-3">
+              <h2 className="text-lg font-semibold flex items-center gap-2">
+                <BarChart3 className="h-5 w-5" style={{ color }} />
+                Radar Comparativo — México vs Top Mundial
+              </h2>
+              <p className="text-xs text-muted-foreground">
+                Comparación normalizada (0-100%) de capacidad instalada, inversión anual, contribución al PIB y emisiones de CO₂. México aparece en verde.
+              </p>
+              <Card>
+                <CardContent className="pt-6">
+                  <ResponsiveContainer width="100%" height={420}>
+                    <RadarChart cx="50%" cy="50%" outerRadius="75%" data={radarData}>
+                      <PolarGrid stroke="hsl(var(--border))" />
+                      <PolarAngleAxis
+                        dataKey="metric"
+                        tick={{ fontSize: 11, fill: "hsl(var(--foreground))" }}
+                      />
+                      <PolarRadiusAxis
+                        angle={90}
+                        domain={[0, 100]}
+                        tick={{ fontSize: 9 }}
+                        stroke="hsl(var(--muted))"
+                      />
+                      {countries.map((c, i) => (
+                        <Radar
+                          key={c.codigo}
+                          name={c.nombre}
+                          dataKey={c.codigo}
+                          stroke={RADAR_COLORS[i] || "#6b7280"}
+                          fill={RADAR_COLORS[i] || "#6b7280"}
+                          fillOpacity={c.codigo === "MX" ? 0.3 : 0.05}
+                          strokeWidth={c.codigo === "MX" ? 2.5 : 1}
+                        />
+                      ))}
+                      <Legend wrapperStyle={{ fontSize: "11px" }} />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "hsl(var(--card))",
+                          border: "1px solid hsl(var(--border))",
+                          borderRadius: "6px",
+                          fontSize: "11px",
+                        }}
+                        formatter={(value: number, name: string) => {
+                          const c = countries.find(cc => cc.codigo === name);
+                          return [`${value}%`, c?.nombre || name];
+                        }}
+                      />
+                    </RadarChart>
+                  </ResponsiveContainer>
+                  <p className="text-[10px] text-muted-foreground text-center mt-2">
+                    Valores normalizados al líder mundial (100%) en cada métrica. Fuentes: IRENA, IEA, BP Statistical Review, Our World in Data.
+                  </p>
+                </CardContent>
+              </Card>
+            </section>
+          );
+        })()}
+
+
         <section className="space-y-3">
           <h2 className="text-lg font-semibold flex items-center gap-2">
             <TrendingUp className="h-5 w-5 text-green-600" />

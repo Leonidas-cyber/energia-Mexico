@@ -3,6 +3,7 @@ export function Footer() {
     <footer className="border-t bg-muted px-4 py-3 text-xs text-muted-foreground">
       <div className="container mx-auto flex flex-wrap gap-x-4 gap-y-1 justify-between">
         <span>© {new Date().getFullYear()} Recursos Energéticos UAM AZC</span>
+        <span className="block sm:inline">Desarrollado por estudiante de Ingeniería Eléctrica · UAM Azcapotzalco · Materia: Recursos Energéticos</span>
         <div className="flex flex-wrap gap-x-3">
           <span>Datos: OpenStreetMap / OpenInfraMap</span>
           <span>•</span>
